@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/HM/Hangman-Game-Logo.png?raw=true" alt="HM banner" width="400" height="400"></p>
+<p align="center"><img src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/HM/Hangman-Game-Full.png?raw=true" alt="HM banner" width="400" height="400"></p>
 
 Most classic chat game built for streamer.bot, supporting twitch, kick, trovo and youtube.
 
