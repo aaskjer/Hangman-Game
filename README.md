@@ -26,7 +26,7 @@ Most classic chat game built for streamer.bot, supporting twitch, kick, trovo an
 
 ## 🎮 How It Works
 
-A moderator or broadcaster starts a Hangman round, and chat guesses by using `!g <letter>` or `!g <word>`. The game tracks lives, wrong guesses, hints, and round timeout until the word is solved, the round times out, or all lives are lost. 
+Start a round of Hangman, and chat guesses by using `!g <letter>` or `!g <word>`. The game tracks lives, wrong guesses, hints, and round timeout until the word is solved, the round times out, or all lives are lost. 
 
 | Event | Trigger | Result |
 |---------|---------|--------|
@@ -37,6 +37,19 @@ A moderator or broadcaster starts a Hangman round, and chat guesses by using `!g
 | 💡 **Hint** | Hint conditions are met | The configured hint is shown to chat.  |
 | 💀 **Game Over** | Lives reach zero | The word is revealed and the round ends.  |
 | ⏰ **Timeout** | Round duration expires | The word is revealed and the round ends.  |
+
+---
+
+## 🎫 Channel Points Mode (Twitch only)
+
+When `Use Channel Points To Start` is enabled, the chat command is effectively disabled — only viewers who redeem the configured Channel Point reward can play. Four bet modes are available:
+
+| Option | Info |
+|---------|---------|
+| **Cost** | The reward's point cost is the bet |
+| **Input** | The viewer types their bet into the reward's text field |
+| **Fixed** | Every redemption bets a fixed configured amount |
+| **Free** | All redemptions play for free regardless of cost |
 
 ---
 
