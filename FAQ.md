@@ -222,7 +222,7 @@ Yes. Each platform has its own independent `GameState` in memory, so a Twitch ro
 
 **Q: How do update notifications work?**
 
-On `Init()`, the script calls the GitHub releases API for the latest tag. If a newer version is found and you haven't been notified about it yet, a **Windows Toast notification** is shown. Clicking the toast opens the releases page. The last-notified tag is stored in a persisted global (`ts_LastNotifiedUpdateTag`) to prevent repeat toasts.
+On `Init()`, the script calls the GitHub releases API for the latest tag. If a newer version is found and you haven't been notified about it yet, a **Windows Toast notification** is shown. Clicking the toast opens the releases page. The last-notified tag is stored in a persisted global (`hm_LastNotifiedUpdateTag`) to prevent repeat toasts.
 
 **Q: The toast notification fires on unrelated clicks. How is it filtered?**
 
