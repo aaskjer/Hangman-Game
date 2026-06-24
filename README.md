@@ -42,7 +42,7 @@ Start a round of Hangman, and chat guesses by using `!g <letter>` or `!g <word>`
 
 ## 🎫 Channel Points Mode (Twitch only)
 
-When `Use Channel Points To Start` is enabled, the chat command is effectively disabled — only viewers who redeem the configured Channel Point reward can play. Four bet modes are available:
+When `Use Channel Points To Start` is enabled, the start command is effectively disabled — only viewers who redeem the configured Channel Point reward can start a game, but everyone can play. Four modes are available:
 
 | Option | Info |
 |---------|---------|
