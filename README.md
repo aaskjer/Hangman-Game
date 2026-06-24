@@ -54,7 +54,7 @@ When `Use Channel Points To Start` is enabled, the start command is effectively 
 
 ---
 
-## Get Started
+# Get Started
 
 [Setup Guide](https://github.com/aaskjer/Hangman-Game/blob/main/Setup-Guide.md)
 
@@ -66,7 +66,7 @@ When `Use Channel Points To Start` is enabled, the start command is effectively 
 
 ---
 
-## Credits & Links
+# Credits & Links
 
 
 [aaskjer on Twitch](https://twitch.tv/aaskjer)
