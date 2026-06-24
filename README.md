@@ -70,7 +70,7 @@ When `Use Channel Points To Start` is enabled, the start command is effectively 
 
 [aaskjer on Twitch](https://twitch.tv/aaskjer)
 
-[Better Stream Announcements on SB Discord](https://discord.com/channels/834650675224248362/1446874050310836396/1446874050310836396)
+[Hangman Game on SB Discord](https://discord.com/channels/834650675224248362/1448251872744837203/1448251872744837203)
 
 [Streamer.bot](https://streamer.bot) / [nate1280](https://www.patreon.com/c/nate1280/home)
 
