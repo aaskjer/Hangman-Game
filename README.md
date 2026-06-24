@@ -17,7 +17,8 @@ Hangman is a chat game built for streamer.bot, supporting twitch, kick, trovo an
 - Optional subscriber and VIP reward boosts. 
 - Optional “addicted” handling with slower guess intervals and reduced rewards. 
 - Hint system with configurable trigger point and reveal limit. 
-- Time reminder support during active rounds. 
+- Time reminder support during active rounds.
+- Auto-detects [Currency Core by StreamUP](https://streamup.tips/product/currency-core) and [LOYALTY POINTS by tawmae](https://tawmae.xyz/loyalty-points),  
 - Every chat message is editable directly in the settings GUI, including start, win, loss, hint, anti-cheat, and timeout messages. 
 - Persistent log file with every Hangman result, filterable and searchable in the built-in log viewer. 
 - Built-in WPF settings window with dark/light mode, tab navigation and integrated wordlist editor. 
