@@ -40,6 +40,7 @@ Scoreboard that shows per-platform who is e.g. the top 5 and personal stats of u
 
 ## Twitch Channel Points
 <p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/5ead9000-f6a7-4ec3-b7ef-647a24b908df"> </p> 
+
 WIP - May not work as intended because it was taken from another game and i'm still not an affiliate so i can't properly test it. Please report [here](https://github.com/aaskjer/Hangman-Game/issues) on issues.
 
 ## Action Log
