@@ -27,6 +27,7 @@ Various game related options
 
 ## Wordlist
 <p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/02a829af-a760-461e-8c63-e76c8032fcb0"> </p> 
+
 Here you can add/remove/edit your [wordlist](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-wordlist) and set the difficulty and [hints](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-hints) 
 
 ## Messages
