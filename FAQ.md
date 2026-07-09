@@ -224,6 +224,18 @@ Yes. Each platform has its own independent `GameState` in memory, so a Twitch ro
 
 On `Init()`, the script calls the GitHub releases API for the latest tag. If a newer version is found and you haven't been notified about it yet, a **Windows Toast notification** is shown. Clicking the toast opens the releases page. The last-notified tag is stored in a persisted global (`hm_LastNotifiedUpdateTag`) to prevent repeat toasts.
 
+---
+
+# Is Hangman Game an AI Slop?
+Partially it is. This script has been developed with input from the streamer.bot community and is support by AI.
+But i spend a lot of time putting heart and soul in it and my goal was to create a robust and valid moderation tool for everyone and easy to use.
+I understand that people, especially IT savvy people, will dislike the project because of the use of AI and i absolutely understand and support their point of view.
+But i had a lot of fun making it as with all my other projects, so i used it to "learn" coding and used AI for something valuable. 
+
+---
+
+AI can create bugs and i am not a developer in classical terms. But i spend a reasonable amount of time fixing any bugs that occured while testing.
+If you still find bugs or have something to say, please let me hear it :)
 **Q: The toast notification fires on unrelated clicks. How is it filtered?**
 
 The toast ID is set to `"Hangman Game"`. On `Execute()`, the script checks both the `toast.id` arg and compares it to that value before opening the browser. Any toast click not matching that ID is ignored or should get reported [here](https://github.com/aaskjer/Hangman-Game/issues).
