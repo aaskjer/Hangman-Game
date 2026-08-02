@@ -1,13 +1,13 @@
 <p align="center"><img src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/HM/Hangman-Game-Full2.png?raw=true" alt="HM banner" width="400" height="400"></p>
 
-Hangman is a chat game built for streamer.bot, supporting twitch, kick, trovo and youtube.
+Hangman is a chat game built for streamer.bot, supporting twitch, kick and youtube.
 
 
 ---
 
 # Overview
 
-- Works on Twitch, YouTube, Trovo, and Kick. 
+- Works on Twitch, YouTube, and Kick. 
 - Start a Hangman round and let chat guess with letters or full words using `!g <letter or word>`. 
 - Supports custom word categories, hints, and difficulty ranges through `Hangman-Wordlist.json`. 
 - Adjustable round rules including max wrong guesses, round duration, minimum difficulty, and maximum difficulty. 
