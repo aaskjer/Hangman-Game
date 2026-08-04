@@ -220,9 +220,13 @@ Yes. Each platform has its own independent `GameState` in memory, so a Twitch ro
 
 ## 🔔 Update Notifications
 
-**Q: How do update notifications work?**
+**Q: How do I know when a new version is available?**
 
-On `Init()`, the script calls the GitHub releases API for the latest tag. If a newer version is found and you haven't been notified about it yet, a **Windows Toast notification** is shown. Clicking the toast opens the releases page. The last-notified tag is stored in a persisted global (`hm_LastNotifiedUpdateTag`) to prevent repeat toasts.
+Opening the Settings GUI checks GitHub for the latest release tag. If it's newer than what's installed, a popup offers to open the releases page.
+
+**Q: Can I check for updates without opening the Settings window?**
+
+Partially — You still have to trigger the `Test` trigger but if you press `Yes` in the update notification popup, the check won't open the GUI but the GitHub page instead.
 
 ---
 
