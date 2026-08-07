@@ -210,7 +210,7 @@ Enable **Reset All (Monthly)** or the per-platform toggles in the Scoreboard set
 
 **Q: Which platforms are supported?**
 
-Twitch, YouTube, Kick, and Trovo. Enable the ones you stream on in Settings GUI → **General → Select Platform(s)**. The game determines the platform automatically from the incoming event.
+Twitch, YouTube and Kick. Enable the ones you stream on in Settings GUI → **General → Select Platform(s)**. The game determines the platform automatically from the incoming event.
 
 **Q: Can the game run on multiple platforms at the same time?**
 
