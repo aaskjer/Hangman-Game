@@ -236,10 +236,5 @@ But i spend a lot of time putting heart and soul in it and my goal was to create
 I understand that people, especially IT savvy people, will dislike the project because of the use of AI and i absolutely understand and support their point of view.
 But i had a lot of fun making it as with all my other projects, so i used it to "learn" coding and used AI for something valuable. 
 
----
-
 AI can create bugs and i am not a developer in classical terms. But i spend a reasonable amount of time fixing any bugs that occured while testing.
 If you still find bugs or have something to say, please let me hear it :)
-**Q: The toast notification fires on unrelated clicks. How is it filtered?**
-
-The toast ID is set to `"Hangman Game"`. On `Execute()`, the script checks both the `toast.id` arg and compares it to that value before opening the browser. Any toast click not matching that ID is ignored or should get reported [here](https://github.com/aaskjer/Hangman-Game/issues).
