@@ -35,8 +35,6 @@ Out of the box only moderators and the broadcaster can start a round. Turn off *
 
 ## 📺 On Stream
 
-<p align="center"><img src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/overlay.png?raw=true" alt="Overlay settings" width="620"></p>
-
 A local HTML file that OBS loads as a browser source and that repaints itself as the round plays out. The gallows fills in with every wrong guess and adapts to however many lives you allow. Category, lives, guessed letters, wrong letters, wrong words and the hint are each their own toggle, so the overlay can be a full scoreboard or just a word and a figure.
 
 Colours, scale and background opacity are yours; it starts out transparent, so it drops onto any scene. One button creates the scene and the browser source in OBS for you.
@@ -44,8 +42,6 @@ Colours, scale and background opacity are yours; it starts out transparent, so i
 ---
 
 ## ⚙️ What You Can Change
-
-<p align="center"><img src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/game.png?raw=true" alt="Settings window" width="620"></p>
 
 **The round** — lives, duration, a reminder before the clock runs out, and the difficulty range words are drawn from.
 
