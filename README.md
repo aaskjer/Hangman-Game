@@ -1,78 +1,98 @@
 <p align="center"><img src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/HM/Hangman-Game-Full2.png?raw=true" alt="HM banner" width="400" height="400"></p>
 
-Hangman is a chat game built for streamer.bot, supporting twitch, kick and youtube.
+<p align="center">
+  <b>Hangman for your chat.</b><br>
+  One word, a row of blanks, and everyone guessing at once — on Twitch, YouTube and Kick.
+</p>
 
-![Static Badge](https://img.shields.io/badge/https%3A%2F%2Fimg.shields.io%2Fbadge%2Fany_text-Twitch%2C_Kick%2C_YouTube-white?label=supported%20plattform)
-![Static Badge](https://img.shields.io/badge/https%3A%2F%2Fimg.shields.io%2Fbadge%2Fany_text-streamer.bot-white?label=tool&color=%230b73ff)
-![GitHub License](https://img.shields.io/github/license/aaskjer/Hangman-Game)
-![GitHub Release](https://img.shields.io/github/v/release/aaskjer/Hangman-Game)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/aaskjer/Hangman-Game/total)
-
----
-
-# Overview
-
-- Works on Twitch, YouTube, and Kick. 
-- Start a Hangman round and let chat guess with letters or full words using `!g <letter or word>`. 
-- Supports custom word categories, hints, and difficulty ranges through `Hangman-Wordlist.json`. 
-- Adjustable round rules including max wrong guesses, round duration, minimum difficulty, and maximum difficulty. 
-- Rewards viewers with points for solving the word, and optionally for revealing correct letters. 
-- Built-in anti-cheat protection with rapid-guess limits and duplicate-guess handling. 
-- Exclude specific Streamer.bot groups or individual users from playing. 
-- Optional subscriber and VIP reward boosts. 
-- Optional “addicted” handling with slower guess intervals and reduced rewards. 
-- Hint system with configurable trigger point and reveal limit. 
-- Time reminder support during active rounds.
-- Auto-detects [Currency Core by StreamUP](https://streamup.tips/product/currency-core) and [LOYALTY POINTS by tawmae](https://tawmae.xyz/loyalty-points).   
-- Every chat message is editable directly in the settings GUI, including start, win, loss, hint, anti-cheat, and timeout messages. 
-- Persistent log file with every Hangman result, filterable and searchable in the built-in log viewer. 
-- Built-in WPF settings window with dark/light mode, tab navigation and integrated wordlist editor. 
+<p align="center">
+  <img src="https://img.shields.io/badge/https%3A%2F%2Fimg.shields.io%2Fbadge%2Fany_text-Twitch%2C_Kick%2C_YouTube-white?label=supported%20plattform" alt="Platforms">
+  <img src="https://img.shields.io/badge/https%3A%2F%2Fimg.shields.io%2Fbadge%2Fany_text-streamer.bot-white?label=tool&color=%230b73ff" alt="streamer.bot">
+  <img src="https://img.shields.io/github/license/aaskjer/Hangman-Game" alt="License">
+  <img src="https://img.shields.io/github/v/release/aaskjer/Hangman-Game" alt="Release">
+  <img src="https://img.shields.io/github/downloads/aaskjer/Hangman-Game/total" alt="Downloads">
+</p>
 
 ---
 
 ## 🎮 How It Works
 
-Start a round of Hangman, and chat guesses by using `!g <letter>` or `!g <word>`. The game tracks lives, wrong guesses, hints, and round timeout until the word is solved, the round times out, or all lives are lost. 
+A round starts, a word is drawn, and chat guesses with `!g <letter>` or `!g <word>`. Lives, wrong guesses, hints and the round clock tick along until somebody solves it or the round runs out.
 
 | Event | Trigger | Result |
 |---------|---------|--------|
-| 🎮 **Start** | A mod starts a round | A word is picked from the configured wordlist and shown as a masked word.  |
-| ✅ **Correct Letter** | A viewer guesses a valid letter in the word | The letter is revealed, and optional letter rewards can be given.  |
-| 🎉 **Correct Word** | A viewer guesses the full word | The round ends and the winner gets the configured reward.  |
-| ❌ **Wrong Guess** | A viewer guesses a wrong letter or word | Lives are reduced depending on the guess type.  |
-| 💡 **Hint** | Hint conditions are met | The configured hint is shown to chat.  |
-| 💀 **Game Over** | Lives reach zero | The word is revealed and the round ends.  |
-| ⏰ **Timeout** | Round duration expires | The word is revealed and the round ends.  |
+| 🎮 **Start** | A round is started | A word is picked from the wordlist and shown masked. |
+| ✅ **Correct Letter** | A viewer names a letter in the word | The letter is revealed, and a letter reward can be paid. |
+| 🎉 **Correct Word** | A viewer names the whole word | The round is won and the payout goes out. |
+| ❌ **Wrong Guess** | A viewer misses | Lives drop — a wrong letter costs one, a wrong full word two. |
+| 💡 **Hint** | Enough wrong guesses, not too much revealed | The word's hint goes to chat. |
+| 💀 **Game Over** | The last life is gone | The word is revealed and the round ends. |
+| ⏰ **Timeout** | The round duration runs out | The word is revealed and the round ends. |
+
+Out of the box only moderators and the broadcaster can start a round. Turn off *Require Mod To Start* to let everyone.
 
 ---
 
-## 🎫 Channel Points Mode (Twitch only)
+## 📺 On Stream
 
-When `Use Channel Points To Start` is enabled, the start command is effectively disabled — only viewers who redeem the configured Channel Point reward can start a game, but everyone can play. Four modes are available:
+<p align="center"><img src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/overlay.png?raw=true" alt="Overlay settings" width="620"></p>
 
-| Option | Info |
+A local HTML file that OBS loads as a browser source and that repaints itself as the round plays out. The gallows fills in with every wrong guess and adapts to however many lives you allow. Category, lives, guessed letters, wrong letters, wrong words and the hint are each their own toggle, so the overlay can be a full scoreboard or just a word and a figure.
+
+Colours, scale and background opacity are yours; it starts out transparent, so it drops onto any scene. One button creates the scene and the browser source in OBS for you.
+
+---
+
+## ⚙️ What You Can Change
+
+<p align="center"><img src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/game.png?raw=true" alt="Settings window" width="620"></p>
+
+**The round** — lives, duration, a reminder before the clock runs out, and the difficulty range words are drawn from.
+
+**The payout** — a base reward for solving the word, optionally points per revealed letter. Harder and longer words earn a percentage on top, capped so a twenty-letter answer cannot run away with your currency. Subscribers and VIPs can earn a boost.
+
+**The words** — `Hangman-Wordlist.json`, edited in the window: word, hint, category and difficulty, with multi-select and filters.
+
+**The chat** — every line the game posts, in one place, with a preview of how it will read and chips for the placeholders each message accepts.
+
+**The regulars** — the addicted list earns less and waits longer between guesses. A rate limit catches guess spam. Blocked users and Streamer.bot groups are ignored entirely.
+
+**The record** — one log file per day with every round, guess and payout, searchable in the built-in viewer. A per-platform scoreboard with personal stats and an optional monthly reset.
+
+Currency Core by [StreamUP](https://streamup.tips/product/currency-core) and [LOYALTY POINTS by tawmae](https://tawmae.xyz/loyalty-points) are picked up automatically; any other currency takes one variable name.
+
+---
+
+## 🎫 Channel Points (Twitch only)
+
+With `Use Channel Points To Start` on, the chat command no longer starts a round — a redemption does. Everyone still guesses normally.
+
+The stake comes from the redemption itself:
+
+| Where it comes from | When |
 |---------|---------|
-| **Cost** | The reward's point cost is the bet |
-| **Input** | The viewer types their bet into the reward's text field |
-| **Fixed** | Every redemption bets a fixed configured amount |
-| **Free** | All redemptions play for free regardless of cost |
+| **What the viewer typed** | The reward asks for text and the viewer entered a number |
+| **The reward's cost** | No input, but the reward costs channel points |
+| **No stake** | Neither applies — the round is free to play |
+
+*Fixed Stake Override* sits above all three: leave it at `0` for the detection above, or set any value to make every redemption stake exactly that.
+
+Streamer.bot cannot pay channel points back out, so a win is paid in your custom currency, with the stake converted at a multiplier you set.
 
 ---
 
-# Get Started
+## 🚀 Get Started
 
-[Setup Guide](https://github.com/aaskjer/Hangman-Game/blob/main/Setup-Guide.md)
-
-[Frequently Asked Questions](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md)
-
-[Import String for streamer.bot](https://github.com/aaskjer/Hangman-Game/blob/main/Import-String.md)
-
-[Download](https://github.com/aaskjer/Hangman-Game/releases)
+| | |
+|---|---|
+| 📥 | [**Download**](https://github.com/aaskjer/Hangman-Game/releases) — the `.sb` file for Streamer.bot |
+| 📋 | [**Import String**](https://github.com/aaskjer/Hangman-Game/blob/main/Import-String.md) — paste it instead, if you prefer |
+| 🧭 | [**Setup Guide**](https://github.com/aaskjer/Hangman-Game/blob/main/Setup-Guide.md) — import, enable the commands, open the window |
+| ❓ | [**FAQ**](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md) — commands, payouts, hints, troubleshooting |
 
 ---
 
-# Credits & Links
-
+## 💜 Credits & Links
 
 [aaskjer on Twitch](https://twitch.tv/aaskjer)
 
