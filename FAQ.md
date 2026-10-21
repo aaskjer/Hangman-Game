@@ -6,33 +6,35 @@
 
 **Q: Where are the config files stored?**
 
-All config files live under your Streamer.bot base directory:
+Under your Streamer.bot base directory:
 ```
-Chat Games/Hangman Game/configs.json       ← game settings
-Chat Games/Hangman Game/messages.json      ← all chat messages
-Chat Games/Hangman Game/Hangman-Wordlist.json ← word pool
-Chat Games/Logs/HM-log.txt                ← action log
+Chat Games/Hangman Game/configs.json            ← settings and every chat message
+Chat Games/Hangman Game/Hangman-Wordlist.json   ← word pool
+Chat Games/Logs/HM-log-YYYY-MM-DD.txt           ← action log, one file per day
 ```
-You should never need to edit these by hand — use the built-in Settings GUI instead.
+Older installs also have a `messages.json` next to `configs.json`. Its contents were folded into `configs.json`, and the file is deleted the next time you save. Editing any of this by hand is never necessary — the settings window writes all of it.
 
 ---
 
-**Q: The Settings GUI won't open / crashes immediately. What do I do?**
+**Q: The Settings GUI won't open. What do I do?**
 
-- Check the Streamer.bot log for error details and please report it [here](https://github.com/aaskjer/Hangman-Game/issues).
-- If `configs.json` or `messages.json` is malformed, the GUI will fail to open. Delete the corrupt file and restart — it will be recreated with defaults.
+If `configs.json` cannot be read at all — another program holds it, or the folder is not writable — the window says so and changes nothing. Close whatever has the file open and try again.
+
+If the file is there but its contents are damaged, the window opens anyway: the damaged file is kept beside it as `configs.json.broken`, and the settings come from `configs.json.bak`, the copy saved before the last write. If that is unusable too, you get the defaults. Either way the window tells you which of the two happened, and Save writes a healthy file again.
+
+Anything else is worth a look in the Streamer.bot log, and worth [reporting](https://github.com/aaskjer/Hangman-Game/issues).
 
 ---
 
 **Q: How do I reset all settings to defaults?**
 
-Open the Settings GUI and click **Reset to Defaults** (red button, bottom-left). This rewrites both `configs.json` and `messages.json` with factory values and reopens the GUI.
+The ↺ button at the bottom left of the settings window. It asks first, then rewrites `configs.json` with factory values and reopens.
 
 ---
 
 **Q: I saved settings but nothing changed in-game. Why?**
 
-Clicking **Save** writes the JSON files to disk. The game script reads config fresh on every `Execute()` call, so the next game command will pick up your changes immediately. No Streamer.bot restart needed.
+Save writes the file immediately, and the game reads its config fresh on every command, so the next round already runs on the new values. No restart needed.
 
 ---
 
@@ -40,28 +42,32 @@ Clicking **Save** writes the JSON files to disk. The game script reads config fr
 
 **Q: Only moderators can start the game — how do I allow everyone?**
 
-In the Settings GUI → **Game** tab, uncheck **Require Mod To Start**. Broadcasters can always start regardless of this setting.
+Settings → **Access** → turn off **Require Mod To Start**. The broadcaster can always start, whatever this is set to.
 
 **Q: How do I start with Channel Points instead of a chat command?**
 
-1. Enable **Allow Channel Points To Start** in the Settings GUI → **Other Tabs → Twitch Channel Points**.
-2. Paste your **Reward ID** into the field (use the ❓ button to look it up).
-3. Set your preferred **Bet Mode** (`fixed`, `cost`, `input`, or `free`).
+1. Turn on **Use Channel Points To Start** on the **Access** page.
+2. Paste your **Reward ID** into the field — the button beside it opens a reward lookup.
 
-Note: Chat command start is only blocked *for starting* — players can still guess normally with `!g` regardless.
+The chat command then no longer starts a round, but everyone still guesses with `!g` as before.
 
-**Q: What does each Channel Points Bet Mode do?**
+**Q: How much does a redemption stake?**
 
-| Mode | Behaviour |
+The stake is read from the redemption, in this order:
+
+| Where it comes from | When |
 |------|-----------|
-| `fixed` | Every redemption bets the exact **Fixed Bet Amount** set in the GUI |
-| `cost` | Bet equals the reward's **channel point cost** |
-| `input` | User types their bet into the reward text field (`rawInput`) |
-| `free` | Bet is forced to 0 — free play, no points wagered |
+| What the viewer typed | The reward asks for text and the viewer entered a number |
+| The reward's cost | No input, but the reward costs channel points |
+| Nothing | Neither applies — the round is free to play |
+
+**Fixed Stake Override** overrules all three. Left at `0` the detection above applies; set to anything higher, every redemption stakes exactly that. Which route was taken is written to the action log on every redemption.
+
+Older setups that used the removed Bet Mode dropdown are migrated on first load: *Fixed* keeps its amount, *Cost*, *Input* and *Free* switch to automatic detection.
 
 **Q: A round is stuck as active after Streamer.bot restarted. How do I clear it?**
 
-Use the mod command `!hmstop` (bound to the Stop Game action). The game state lives in memory, so a Streamer.bot restart already clears it — just start a new round normally.
+It already is clear — the round lives in memory only, so a restart ends it. Just start a new one. During a session, `!hmstop` ends a round.
 
 ---
 
@@ -89,7 +95,7 @@ Command names depend on what you configured in Streamer.bot — the above are th
 
 **Q: Can the same letter be guessed twice?**
 
-No. A duplicate letter guess sends `MsgAlreadyGuessed` and is ignored — it does not cost lives or count toward anti-cheat.
+No. A duplicate letter guess sends `MsgAlreadyGuessed` and is ignored — it does not cost lives or count toward the rate limit.
 
 ---
 
@@ -102,18 +108,25 @@ The game auto-detects your currency in this priority order:
 2. **tawmae Loyalty Points** — reads `tawmae_Settings_LOYALTY POINTS` global.
 3. **Config fallback** — uses `PointsVar` / `PointsName` from `configs.json`.
 
-If you use a custom currency with a different variable name, set **Points Var** and **Points Name** in the Settings GUI → **Game** tab.
+For a custom currency under a different variable name, set **Points Variable** and **Points Name** on the **Access** page.
 
 **Q: How are win points calculated?**
 
+In three steps:
+
 ```
-awarded = (RewardWinPoints + ChannelPointBet) × RoleMultiplier
+base   = RewardWinPoints × (1 + wordBonus%)
+stake  = redeemed stake × ChannelPointPayoutMultiplier
+paid   = (base + stake) × roleMultiplier
 ```
-`RoleMultiplier` starts at 1.0 and is adjusted by subscriber boost, VIP boost, and addicted penalty (see Role Management below).
+
+`wordBonus%` is `DifficultyBonusPercent` per difficulty level above 1, plus `LengthBonusPercent` per letter beyond `LengthBonusFromLetters`, capped at `MaxWordBonusPercent` — set that cap to `0` to lift it. Turning off **Scale Win By Word** drops the bonus to zero, so every word pays the base.
+
+`roleMultiplier` starts at 1.0 and takes the subscriber boost, the VIP boost and the addicted penalty.
 
 **Q: What does "Reward Per Letter" do?**
 
-If enabled, every correct letter guess awards **Points Per Letter** *in addition* to the base win reward. The letter reward is paid out immediately on each hit; the win reward is paid when the round ends.
+Every revealed letter pays **Points Per Letter** on the spot, on top of the win reward that lands when the round ends.
 
 ---
 
@@ -121,7 +134,7 @@ If enabled, every correct letter guess awards **Points Per Letter** *in addition
 
 **Q: How do Subscriber / VIP boosts work?**
 
-Enable the boost in **Settings GUI → Game → Role Management** and set the percentage. The multiplier stacks additively:
+Turn the boost on under **Game → Role Boosts** and set the percentage. They stack additively:
 ```
 multiplier = 1.0 + (SubBoost%) + (VipBoost%)  →  then clamped to ≥ 0
 ```
@@ -129,11 +142,11 @@ Example: 10% sub boost + 20% VIP boost on a 500-pt win = `500 × 1.30 = 650 pts`
 
 **Q: What is the "Addicted" system?**
 
-Users on the addicted list face two penalties:
-- **Points penalty** — their win multiplier is reduced by `AddictedPointsPenaltyPercent` (e.g. 50% → they earn half).
-- **Guess cooldown** — they must wait `AddictedGuessIntervalSeconds` between guesses.
+For the regulars who play every round. They keep playing, with two strings attached:
+- **Points penalty** — their win multiplier drops by `AddictedPointsPenaltyPercent`, so 50 means they earn half.
+- **Guess interval** — they wait `AddictedGuessIntervalSeconds` between their own guesses.
 
-Manage the list with `!addicted add/remove <user>` (mods only) or edit **Addicted Users** directly in the GUI.
+Manage the list with `!addicted add/remove <user>` (mods only) or edit **Addicted Users** on the **Access** page.
 
 ---
 
@@ -141,32 +154,32 @@ Manage the list with `!addicted add/remove <user>` (mods only) or edit **Addicte
 
 **Q: When does the game send a hint?**
 
-A hint is sent to chat when **all** of these are true:
+When all four hold:
 1. `HintEnabled` is on.
-2. The word entry has a non-empty `Hint` field.
+2. The word has a hint.
 3. Wrong guesses have reached `HintAfterWrongGuesses`.
-4. The percentage of revealed letters is below `HintStopRevealPercent`.
+4. Less of the word is revealed than `HintStopRevealPercent` allows.
 
-The hint fires once per wrong guess check (letter miss or word miss), not repeatedly.
+The hint fires once per wrong guess check, not repeatedly. Keep `HintAfterWrongGuesses` below your lives — otherwise the round is over before the hint can fire, and the settings window warns you about exactly that on save.
 
 **Q: How do I set hints per word?**
 
-In the **Wordlist** tab of the Settings GUI, fill in the **Hint** column for each word. Words with an empty hint field will never trigger the hint message even if hints are enabled globally.
+Fill the **Hint** column on the **Words** page. A word without a hint never triggers the hint message, even with hints switched on.
 
 ---
 
 ## 🛡️ Anti-Cheat & Cooldowns
 
-**Q: What does the Anti-Cheat do?**
+**Q: What does the rate limit do?**
 
-It limits how many guesses a single user can make within a rolling time window. If a user exceeds `AntiCheatMaxGuesses` guesses within `AntiCheatWindowSeconds`, they are blocked and sent the `MsgAntiCheat` message. Duplicate letter guesses do **not** count toward this limit.
+It caps how many guesses one user may make inside a rolling window. Past `AntiCheatMaxGuesses` within `AntiCheatWindowSeconds` the guess is blocked and `MsgAntiCheat` goes out. Duplicate letter guesses do not count toward it, and broadcasters are exempt. Setting the maximum to `0` switches the limit off.
 
 **Q: What is the difference between Global Cooldown and User Cooldown?**
 
-- **Global Cooldown** — applies to *all* users simultaneously after a guess.
-- **User Cooldown** — applies only to the individual user who just guessed.
+- **Global Cooldown** — everyone waits before the game can be started again.
+- **User Cooldown** — only the person who just started waits.
 
-Both are set in the Settings GUI → **General** tab and are applied to the Streamer.bot command directly via `CPH.CommandSetGlobalCooldownDuration` / `CPH.CommandSetUserCooldownDuration`.
+Both sit on the **Access** page and are written straight into the Streamer.bot command when you save, through `CPH.CommandSetGlobalCooldownDuration` and `CPH.CommandSetUserCooldownDuration`.
 
 ---
 
@@ -174,19 +187,19 @@ Both are set in the Settings GUI → **General** tab and are applied to the Stre
 
 **Q: How do I add or edit words?**
 
-Open the Settings GUI → **Wordlist** tab. You can add, delete, search, and filter words directly in the table. Changes are held in memory until you click **Save** or **Save & Exit**.
+On the **Words** page. Add, delete, search and filter directly in the table; changes stay in memory until you hit Save or Save & Exit.
 
 **Q: What does Difficulty control?**
 
-Each word has a `Difficulty` value (integer, minimum 1). The game only picks words where `MinDifficulty ≤ Difficulty ≤ MaxDifficulty`. Set both to the same value to pin a single difficulty tier.
+Each word carries a `Difficulty` of at least 1. Only words within `MinDifficulty … MaxDifficulty` are drawn. Set both to the same number to pin one tier.
 
 **Q: What happens when all words in the difficulty range have been used?**
 
-The used-word pool for the current difficulty range is automatically cleared and all words become eligible again. The game logs this as `"All N word(s) in current difficulty range exhausted — resetting used-word pool."` A fresh pick is then made immediately.
+The used-word pool for that range is cleared and every word becomes eligible again. The log records it as `"All N word(s) in current difficulty range exhausted — resetting used-word pool."`, and the next pick happens right away.
 
 **Q: The wordlist file is missing or corrupt. Will the game break?**
 
-No. On every round start the game checks whether `Hangman-Wordlist.json` exists and is valid. If it is missing or empty, a built-in default wordlist (24 words) is written to disk automatically.
+No. Every round start checks `Hangman-Wordlist.json`. Missing or empty, and the built-in default list of 15 words is written to disk — the same list the *Load Defaults* button hands out.
 
 ---
 
@@ -194,15 +207,15 @@ No. On every round start the game checks whether `Hangman-Wordlist.json` exists 
 
 **Q: How is the leaderboard built?**
 
-The leaderboard is updated whenever a user calls `!hmstats` (personal stats command). It is **not** updated automatically on win/loss — the player must check their stats at least once for their row to appear.
+It is updated whenever a user calls `!hmstats`, not automatically on a win or a loss. A player who never checks their stats never appears on it.
 
 **Q: How do I exclude the broadcaster or bot from the scoreboard?**
 
-In Settings GUI → **Other Tabs → Scoreboard**: uncheck **Include Broadcaster** and/or **Include Bot**. You can also add usernames to **Blocked From Board** (comma-separated) to exclude specific accounts (e.g. other bots).
+On the **Board** page, turn off **Include Broadcaster** or **Include Bot**. **Blocked From Board** takes a comma-separated list for anything else you want hidden, other bots for instance. Hiding someone there does not stop them playing — that list is on the **Access** page.
 
 **Q: How does the monthly auto-reset work?**
 
-Enable **Reset All (Monthly)** or the per-platform toggles in the Scoreboard settings. On the first scoreboard command of each month (or on/after the configured `Reset Day`), all user stats for that platform are zeroed and the leaderboard is cleared. A chat message is sent and the reset date is saved to a persisted global so it only runs once per month.
+Turn on **Reset All (Monthly)** or the per-platform toggles. On the first scoreboard command of a new month, or on and after the configured reset day, that platform's stats are zeroed and the board cleared. A chat message goes out and the date is stored, so it runs once.
 
 ---
 
@@ -210,11 +223,27 @@ Enable **Reset All (Monthly)** or the per-platform toggles in the Scoreboard set
 
 **Q: Which platforms are supported?**
 
-Twitch, YouTube and Kick. Enable the ones you stream on in Settings GUI → **General → Select Platform(s)**. The game determines the platform automatically from the incoming event.
+Twitch, YouTube and Kick, all three at once and without a setting to switch them on. The platform comes from the incoming event. To keep the game off one of them, disable the trigger for it in Streamer.bot.
 
 **Q: Can the game run on multiple platforms at the same time?**
 
-Yes. Each platform has its own independent `GameState` in memory, so a Twitch round and a YouTube round can be active simultaneously without interfering with each other. Points, stats, and leaderboards are also stored per-platform.
+Yes. Each platform has its own `GameState` in memory, so a Twitch round and a YouTube round run side by side without touching each other. Points, stats and leaderboards are kept per platform as well.
+
+---
+
+## 📺 OBS Overlay
+
+**Q: What does the overlay show?**
+
+A local HTML file that OBS loads as a browser source and that repaints itself while the round runs: the gallows filling in with every wrong guess, the masked word, and whichever of category, lives, guessed letters, wrong letters, wrong words and hint you switch on. When the round ends it shows the answer and fades out after the delay you set — `0` makes it disappear at once.
+
+**Q: How do I get it into OBS?**
+
+*Setup Overlay in OBS* on the **Overlay** page creates the scene and the browser source over the Streamer.bot OBS connection you already have. By hand works too: the folder button opens the directory, and `hangman_overlay.html` is a plain local file.
+
+**Q: Does the overlay give the hint away?**
+
+No. It follows the same rules as chat — *Use Hints*, *Hint After Wrong Guesses* and *Hints Stop Reveal* — so it never shows a hint chat has not earned. Showing it at all is a separate toggle.
 
 ---
 
@@ -222,11 +251,7 @@ Yes. Each platform has its own independent `GameState` in memory, so a Twitch ro
 
 **Q: How do I know when a new version is available?**
 
-Opening the Settings GUI checks GitHub for the latest release tag. If it's newer than what's installed, a popup offers to open the releases page.
-
-**Q: Can I check for updates without opening the Settings window?**
-
-Partially — You still have to trigger the `Test` trigger but if you press `Yes` in the update notification popup, the check won't open the GUI but the GitHub page instead.
+Opening the settings window checks GitHub for the latest release in the background. If there is a newer one, a red pill appears in the window header; clicking it opens the releases page. The check never holds the window shut — if GitHub is slow or unreachable, the pill simply does not appear.
 
 ---
 

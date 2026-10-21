@@ -17,35 +17,44 @@ Enable all commands in the `Commands` tab of streamer.bot.
 <p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/8e6e6677-f7e8-45db-b9f8-6bfc88e06628"> </p> 
 Right-Click on `Test` and click `Test Trigger` in the trigger section of `[HM] - Settings` to open the GUI of the game.
 
-## General
-<p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/e9d2c7b2-ebb2-4e19-9b13-4489c4e5efcd"> </p> 
-Adjust the general behavior here, hover with your mouse over options to see tooltips with further explanations.
+The window has one page per subject, picked from the rail on the left. Every field carries a tooltip, so hovering usually answers the question faster than this page does.
 
 ## Game
-<p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/d6fccee9-4475-4c53-b9f1-8e3b7e9a7df2"> </p> 
-Various game related options
+<p align="center"><img alt="Game page" src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/game.png?raw=true"></p>
 
-## Wordlist
-<p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/02a829af-a760-461e-8c63-e76c8032fcb0"> </p> 
+Lives, round duration and the time reminder, then when hints appear and what a win pays. Word scaling sits here too: harder and longer words earn a percentage on top, capped so a very long word cannot run away with your currency.
 
-Here you can add/remove/edit your [wordlist](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-wordlist) and set the difficulty and [hints](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-hints) 
+## Words
+<p align="center"><img alt="Words page" src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/words.png?raw=true"></p>
+
+Add, edit and delete [words](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-wordlist), each with a [hint](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-hints), a category and a difficulty. Ctrl+click picks single rows, Shift+click a range, Del removes the selection. The difficulty range and the categories in play are folded away above the table.
+
+## Overlay
+<p align="center"><img alt="Overlay page" src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/overlay.png?raw=true"></p>
+
+A local HTML file that OBS loads as a browser source and that repaints itself as the round runs. *Setup Overlay in OBS* creates the scene and the source over your existing Streamer.bot OBS connection. The gallows, the colours, the scale and what is shown next to the word are all set here.
+
+## Access
+<p align="center"><img alt="Access page" src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/access.png?raw=true"></p>
+
+Who may start a round and who may not play at all, the start cooldowns, the guess rate limit, and the addicted list for regulars who should earn less and pace themselves. Channel Points live here as well.
+
+Channel Points are a work in progress. The code came from another game and the author is not an affiliate, so it is not properly tested — if something misbehaves, please report it [here](https://github.com/aaskjer/Hangman-Game/issues).
 
 ## Messages
-<p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/4c9e1c6a-5237-4869-aa3e-c33327544a47"> </p> 
-Edit any message or translate them in your language. Placeholders are mentioned in the tooltips of the respective message
+<p align="center"><img alt="Messages page" src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/messages.png?raw=true"></p>
 
-## Scoreboard
-<p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/83af4809-228b-4c96-914f-31f719510442"> </p> 
-Scoreboard that shows per-platform who is e.g. the top 5 and personal stats of users. You can also search for other users and let it reset automatically.
+Every line the game posts, in one place. Pick a message from the list, edit it, and the preview underneath shows how it will read in chat. The chips below the box insert the placeholders that message accepts. The bot account and `/me` toggles at the bottom apply to the game's messages and to the cooldown replies separately.
 
-## Twitch Channel Points
-<p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/5ead9000-f6a7-4ec3-b7ef-647a24b908df"> </p> 
+## Board
+<p align="center"><img alt="Board page" src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/board.png?raw=true"></p>
 
-WIP - May not work as intended because it was taken from another game and i'm still not an affiliate so i can't properly test it. Please report [here](https://github.com/aaskjer/Hangman-Game/issues) on issues.
+How many players the scoreboard shows, who is left off it, and when it resets. Reset runs per platform or for all of them at once.
 
-## Action Log
-<p align="center"><img alt="grafik" src="https://github.com/user-attachments/assets/06a80572-aaa0-4c02-b5e1-ee099996f124"> </p> 
-Track all situations and actions happening during the game, and tracks who won
+## Log
+<p align="center"><img alt="Log page" src="https://github.com/aaskjer/Hangman-Game/blob/main/docs/screenshots/log.png?raw=true"></p>
+
+Every round, guess and payout, one file per day in the `Logs` folder. Filter by result or platform, or search the text.
 
 ---
 
