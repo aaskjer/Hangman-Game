@@ -92,6 +92,8 @@ Streamer.bot cannot pay channel points back out, so a win is paid in your custom
 
 [aaskjer on Twitch](https://twitch.tv/aaskjer)
 
+[aaskjer.github.io](https://aaskjer.github.io/)
+
 [Hangman Game on SB Discord](https://discord.com/channels/834650675224248362/1448251872744837203/1448251872744837203)
 
 [Streamer.bot](https://streamer.bot) / [nate1280](https://www.patreon.com/c/nate1280/home)
