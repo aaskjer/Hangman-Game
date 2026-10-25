@@ -28,8 +28,12 @@ A round starts, a word is drawn, and chat guesses with `!g <letter>` or `!g <wor
 | 💡 **Hint** | Enough wrong guesses, not too much revealed | The word's hint goes to chat. |
 | 💀 **Game Over** | The last life is gone | The word is revealed and the round ends. |
 | ⏰ **Timeout** | The round duration runs out | The word is revealed and the round ends. |
+| 🛑 **Stopped** | A moderator types `!killhm` | The word is revealed and the round ends. |
+| ⚡ **Blitz** | By chance, or a moderator types `!hm blitz` | A short round: less time, fewer lives, every point multiplied. |
+| 👾 **Glitch** | Evil Hangman — chat has burned through part of its lives | The overlay glitches and the word is swapped. One revealed letter survives. |
+| 🔥 **Streak** | A player solves again before losing a round | The streak grows, can pay a bonus, and shows in `!hmp`. |
 
-Out of the box only moderators and the broadcaster can start a round. Turn off *Require Mod To Start* to let everyone.
+Out of the box only moderators and the broadcaster can start a round. Turn off *Require Mod To Start* to let everyone. Blitz, Evil Hangman and streaks are optional and stay off until you switch them on.
 
 ---
 
@@ -39,6 +43,10 @@ A local HTML file that OBS loads as a browser source and that repaints itself as
 
 Colours, scale and background opacity are yours; it starts out transparent, so it drops onto any scene. One button creates the scene and the browser source in OBS for you.
 
+A blitz round wears a pulsing badge. Evil Hangman's word swap plays as a glitch: the old word breaks up, the panel scrambles under scanlines, the new word decodes and the surviving letter lights up — and chat only hears about it once the glitch is over, so nobody gets spoiled. A round a moderator ends shows *GAME OVER - MODERATOR STOPPED*.
+
+After an update the game refreshes the browser source in OBS by itself, so the new overlay shows up without you touching OBS.
+
 ---
 
 ## ⚙️ What You Can Change
@@ -47,7 +55,9 @@ Colours, scale and background opacity are yours; it starts out transparent, so i
 
 **The payout** — a base reward for solving the word, optionally points per revealed letter. Harder and longer words earn a percentage on top, capped so a twenty-letter answer cannot run away with your currency. Subscribers and VIPs can earn a boost.
 
-**The words** — `Hangman-Wordlist.json`, edited in the window: word, hint, category and difficulty, with multi-select and filters.
+**The words** — `Hangman-Wordlist.json`, edited in the window: word, hint, category and difficulty, with multi-select and filters. An importer fills it from free sources, hints and difficulty included: countries, capitals, rivers and more from Wikidata, German nouns with their meaning from OdeNet, Pokémon from PokéAPI, video games from IGDB.
+
+**The twists** — blitz rounds with a payout multiplier, Evil Hangman's mid-round word swap, and win streaks with an optional bonus.
 
 **The chat** — every line the game posts, in one place, with a preview of how it will read and chips for the placeholders each message accepts.
 
@@ -97,5 +107,7 @@ Streamer.bot cannot pay channel points back out, so a win is paid in your custom
 [Hangman Game on SB Discord](https://discord.com/channels/834650675224248362/1448251872744837203/1448251872744837203)
 
 [Streamer.bot](https://streamer.bot) / [nate1280](https://www.patreon.com/c/nate1280/home)
+
+Word import: [Wikidata](https://www.wikidata.org) (CC0) · [OdeNet](https://github.com/hdaSprachtechnologie/odenet) (CC BY-SA 4.0) · [PokéAPI](https://pokeapi.co) · [IGDB](https://www.igdb.com)
 
 YOU ♡

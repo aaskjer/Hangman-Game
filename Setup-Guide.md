@@ -24,15 +24,21 @@ The window has one page per subject, picked from the rail on the left. Every fie
 
 Lives, round duration and the time reminder, then when hints appear and what a win pays. Word scaling sits here too: harder and longer words earn a percentage on top, capped so a very long word cannot run away with your currency.
 
+Between the hints and the payout sit the two optional twists. [Blitz](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-blitz-rounds) sets how often a round turns into a short, multiplied one and whether mods may call one with `!hm blitz`. [Evil Hangman](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-evil-hangman) sets when the word is swapped, whether lives refill, and how long the overlay glitches.
+
 ## Words
 <p align="center"><img alt="Words page" src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/screenshots/words.png?raw=true"></p>
 
 Add, edit and delete [words](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-wordlist), each with a [hint](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-hints), a category and a difficulty. Ctrl+click picks single rows, Shift+click a range, Del removes the selection. The difficulty range and the categories in play are folded away above the table.
 
+*Import* [fetches words](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-importing-words) with hints from Wikidata, OdeNet, PokéAPI or IGDB. Pick a source and a topic, fetch, untick what you don't want, and the rest lands in the category you named. Nothing is kept until you click Save.
+
 ## Overlay
 <p align="center"><img alt="Overlay page" src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/screenshots/overlay.png?raw=true"></p>
 
 A local HTML file that OBS loads as a browser source and that repaints itself as the round runs. *Setup Overlay in OBS* creates the scene and the source over your existing Streamer.bot OBS connection. The gallows, the colours, the scale and what is shown next to the word are all set here.
+
+OBS keeps showing the overlay it loaded until the browser source is refreshed. The game does that by itself after an update; *Refresh Overlay in OBS* does it on demand.
 
 ## Access
 <p align="center"><img alt="Access page" src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/screenshots/access.png?raw=true"></p>
@@ -50,6 +56,8 @@ Every line the game posts, in one place. Pick a message from the list, edit it, 
 <p align="center"><img alt="Board page" src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/screenshots/board.png?raw=true"></p>
 
 How many players the scoreboard shows, who is left off it, and when it resets. Reset runs per platform or for all of them at once.
+
+[Streaks](https://github.com/aaskjer/Hangman-Game/blob/main/FAQ.md#-streaks) are switched on here: from which length they are announced, and the bonus a streak adds to a win.
 
 ## Log
 <p align="center"><img alt="Log page" src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/screenshots/log.png?raw=true"></p>
