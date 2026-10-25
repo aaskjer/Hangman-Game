@@ -11,6 +11,7 @@ Under your Streamer.bot base directory:
 Chat Games/Hangman Game/configs.json            ← settings and every chat message
 Chat Games/Hangman Game/Hangman-Wordlist.json   ← word pool
 Chat Games/Logs/HM-log-YYYY-MM-DD.txt           ← action log, one file per day
+Chat Games/Hangman Game/Import Cache/           ← OdeNet download for the word importer
 ```
 Older installs also have a `messages.json` next to `configs.json`. Its contents were folded into `configs.json`, and the file is deleted the next time you save. Editing any of this by hand is never necessary — the settings window writes all of it.
 
@@ -67,7 +68,7 @@ Older setups that used the removed Bet Mode dropdown are migrated on first load:
 
 **Q: A round is stuck as active after Streamer.bot restarted. How do I clear it?**
 
-It already is clear — the round lives in memory only, so a restart ends it. Just start a new one. During a session, `!hmstop` ends a round.
+It already is clear — the round lives in memory only, so a restart ends it. Just start a new one. During a session, `!killhm` ends a round.
 
 ---
 
@@ -77,14 +78,18 @@ It already is clear — the round lives in memory only, so a restart ends it. Ju
 
 | Command | Who | What it does |
 |---------|-----|--------------|
-| `!hm` | Mod / Broadcaster | Start a new round |
-| `!hmstop` | Mod / Broadcaster | Stop the current round |
-| `!g <letter or word>` | Everyone | Guess a letter or the full word |
-| `!hmrepeat` | Everyone | Repeat the current word state |
-| `!addicted add <user>` | Mod / Broadcaster | Add a user to the addicted list |
-| `!addicted remove <user>` | Mod / Broadcaster | Remove a user from the addicted list |
+| `!hm` / `!hangman` | Mod / Broadcaster | Start a new round |
+| `!hm blitz` | Mod / Broadcaster | Start a [blitz round](#-blitz-rounds) |
+| `!killhm` / `!killhangman` | Mod / Broadcaster | Stop the current round |
+| `!g` / `!guess` `<letter or word>` | Everyone | Guess a letter or the full word |
+| `!hmr` / `!hangmanrepeat` | Everyone | Repeat the current word state |
+| `!hmp` / `!hangmanpersonal` | Everyone | Your own stats, with your streak |
+| `!hml` / `!hmlookup` `<user>` | Everyone | Someone else's stats |
+| `!hms` / `!hangmanscoreboard` | Everyone | The scoreboard for this platform |
+| `!hma` / `!hangmanaddict` `add <user>` | Mod / Broadcaster | Add a user to the addicted list |
+| `!hma` / `!hangmanaddict` `remove <user>` | Mod / Broadcaster | Remove a user from the addicted list |
 
-Command names depend on what you configured in Streamer.bot — the above are the defaults.
+These are the commands as they come in the import. You can rename them in Streamer.bot's `Commands` tab.
 
 **Q: How does guessing a full word work? Does it cost lives?**
 
@@ -115,18 +120,20 @@ For a custom currency under a different variable name, set **Points Variable** a
 In three steps:
 
 ```
-base   = RewardWinPoints × (1 + wordBonus%)
+base   = RewardWinPoints × (1 + wordBonus%) × blitz × (1 + streakBonus%)
 stake  = redeemed stake × ChannelPointPayoutMultiplier
 paid   = (base + stake) × roleMultiplier
 ```
 
 `wordBonus%` is `DifficultyBonusPercent` per difficulty level above 1, plus `LengthBonusPercent` per letter beyond `LengthBonusFromLetters`, capped at `MaxWordBonusPercent` — set that cap to `0` to lift it. Turning off **Scale Win By Word** drops the bonus to zero, so every word pays the base.
 
+`blitz` is the **Blitz Payout Multiplier** in a [blitz round](#-blitz-rounds) and 1 otherwise. `streakBonus%` comes from the winner's [streak](#-streaks) and is 0 while streaks are off.
+
 `roleMultiplier` starts at 1.0 and takes the subscriber boost, the VIP boost and the addicted penalty.
 
 **Q: What does "Reward Per Letter" do?**
 
-Every revealed letter pays **Points Per Letter** on the spot, on top of the win reward that lands when the round ends.
+Every revealed letter pays **Points Per Letter** on the spot, on top of the win reward that lands when the round ends. In a blitz round it is multiplied too.
 
 ---
 
@@ -146,7 +153,7 @@ For the regulars who play every round. They keep playing, with two strings attac
 - **Points penalty** — their win multiplier drops by `AddictedPointsPenaltyPercent`, so 50 means they earn half.
 - **Guess interval** — they wait `AddictedGuessIntervalSeconds` between their own guesses.
 
-Manage the list with `!addicted add/remove <user>` (mods only) or edit **Addicted Users** on the **Access** page.
+Manage the list with `!hma add/remove <user>` (mods only) or edit **Addicted Users** on the **Access** page.
 
 ---
 
@@ -165,6 +172,38 @@ The hint fires once per wrong guess check, not repeatedly. Keep `HintAfterWrongG
 **Q: How do I set hints per word?**
 
 Fill the **Hint** column on the **Words** page. A word without a hint never triggers the hint message, even with hints switched on.
+
+---
+
+## ⚡ Blitz Rounds
+
+**Q: What is a blitz round?**
+
+A short, sharp round. It runs on **Blitz Duration** and **Blitz Lives** instead of the normal round settings, and every point it pays — the letter rewards and the win — is multiplied by **Blitz Payout Multiplier**. The channel point stake is not multiplied. The overlay shows a pulsing ⚡ BLITZ badge while it runs.
+
+**Q: How does a round become a blitz?**
+
+Turn on **Enable Blitz** under **Game → Blitz Round**. Every round started from then on, by chat command or channel points, has **Blitz Chance** percent to be a blitz, and moderators can call one with `!hm blitz` while **Allow '!hangman blitz'** is on. Set the chance to `0` to have blitz rounds only on command.
+
+---
+
+## 👾 Evil Hangman
+
+**Q: What does Evil Hangman do?**
+
+Once chat has used up **Glitch At** percent of the round's lives — 50 with 6 lives fires on the 3rd wrong guess — the overlay glitches and the word is swapped for another. Every guess is wiped except one randomly picked letter that was already revealed, and the new word always contains it. It happens at most once per round, and **Evil Chance** decides how many rounds are evil at all.
+
+**Q: Do lives refill after the swap?**
+
+Your choice. **Refill Lives On Swap** gives the new word full lives; with it off, lives already lost stay lost.
+
+**Q: Which word does it swap to?**
+
+One from the same category when **Prefer Same Category** is on and a word fits, otherwise from any category in play — always within your difficulty range and always containing the surviving letter. If no other word contains that letter, nothing survives.
+
+**Q: Why is chat quiet while the overlay glitches?**
+
+The swap message waits until the glitch has played out on the overlay (**Glitch Duration** plus half a second), and guesses, `!hmr` and the "already running" reply are ignored until then — any reply would show the new word before the overlay does. If the round ends during the glitch, the message is dropped. With the duration at `0`, or the overlay switched off, the swap is announced at once.
 
 ---
 
@@ -203,11 +242,44 @@ No. Every round start checks `Hangman-Wordlist.json`. Missing or empty, and the 
 
 ---
 
+## 📥 Importing Words
+
+**Q: Where can the importer get words from?**
+
+*Import* on the **Words** page fetches from four free sources:
+
+| Source | What | Language | License |
+|--------|------|----------|---------|
+| [Wikidata](https://www.wikidata.org) | Countries, capitals, big cities, rivers, mountains, chemical elements, musical instruments, sports, dog breeds — or any Wikidata class by its Q-ID | German, English | CC0 |
+| [OdeNet](https://github.com/hdaSprachtechnologie/odenet) | German nouns by topic — animals, plants, food, objects, people & jobs, body, places, materials, nature, feelings — with their meaning as the hint | German | CC BY-SA 4.0 |
+| [PokéAPI](https://pokeapi.co) | Pokémon by generation, with their category as the hint | German, English | — |
+| [IGDB](https://www.igdb.com) | Video games, best-rated first, with year and genre as the hint | English titles | IGDB terms |
+
+You see the list before anything is added: untick what you don't want, fix a hint in the table, and the rest lands in the category you named. Nothing is kept until you click Save.
+
+**Q: What does the importer leave out?**
+
+Answers with digits or symbols, more letters than **Max. Letters** or more words than **Max. Words Per Answer**, and words already in your list. Accents are folded (é → e). Umlauts stay letters to guess, unless **Write umlauts out** turns them into ae, oe, ue and ss. A hint that names its own answer is swapped for another one or masked with `___`.
+
+**Q: How is the difficulty picked?**
+
+*Auto* rates every word from its length, rare letters (j, q, x, y, z) and how well known it is — the rank in the result for Wikidata and IGDB, the generation for Pokémon. Or pick one fixed difficulty for the whole import.
+
+**Q: What does IGDB need?**
+
+The Client ID and Client Secret of a free Twitch developer app. Create one at [dev.twitch.tv/console/apps](https://dev.twitch.tv/console/apps) with any name, `http://localhost` as the redirect URL and *Confidential* as the client type. Both values are kept in Streamer.bot's global variables (`hm_IgdbClientId`, `hm_IgdbClientSecret`), never in `configs.json`.
+
+**Q: Some OdeNet hints don't match the word.**
+
+OdeNet groups synonyms, and a few groups mix two meanings. The importer picks the word whose meanings fit the topic best, but read the list before you add it. The OdeNet file (about 29 MB) is downloaded once and kept in `Chat Games/Hangman Game/Import Cache` for a month.
+
+---
+
 ## 🏆 Scoreboard
 
 **Q: How is the leaderboard built?**
 
-It is updated whenever a user calls `!hmstats`, not automatically on a win or a loss. A player who never checks their stats never appears on it.
+From the players' stats, read fresh every time someone asks with `!hms`. Everyone who has won at least one round on that platform is on it, ranked by wins and then by points.
 
 **Q: How do I exclude the broadcaster or bot from the scoreboard?**
 
@@ -216,6 +288,22 @@ On the **Board** page, turn off **Include Broadcaster** or **Include Bot**. **Bl
 **Q: How does the monthly auto-reset work?**
 
 Turn on **Reset All (Monthly)** or the per-platform toggles. On the first scoreboard command of a new month, or on and after the configured reset day, that platform's stats are zeroed and the board cleared. A chat message goes out and the date is stored, so it runs once.
+
+---
+
+## 🔥 Streaks
+
+**Q: How do streaks work?**
+
+Turn on **Track Streaks** on the **Board** page. Every word a player solves adds one to their streak. It only breaks when a round they guessed in is lost — game over or time up. A round a moderator stops breaks nothing.
+
+**Q: Do streaks pay?**
+
+**Streak Bonus** adds a percentage to the win for every win in a row after the first — 10 means the third win in a row pays +20 % — up to **Max. Streak Bonus**. Streaks from **Announce From** on are cheered after a win and called out when they end.
+
+**Q: Where do players see their streak?**
+
+`!hmp` adds a line with the current and the best streak. `{streak}` and `{beststreak}` also work in the board and stats messages. The monthly reset clears streaks along with the rest of the stats.
 
 ---
 
@@ -240,6 +328,21 @@ A local HTML file that OBS loads as a browser source and that repaints itself wh
 **Q: How do I get it into OBS?**
 
 *Setup Overlay in OBS* on the **Overlay** page creates the scene and the browser source over the Streamer.bot OBS connection you already have. By hand works too: the folder button opens the directory, and `hangman_overlay.html` is a plain local file.
+
+**Q: What does the overlay show when a round ends?**
+
+| Ending | Banner |
+|--------|--------|
+| Solved | `SOLVED - <word>` in green |
+| Last life gone | `GAME OVER - <word>` in red |
+| Time up | `TIME UP - <word>` in red |
+| `!killhm` | `GAME OVER - MODERATOR STOPPED` in orange |
+
+The answer is spelled out above the banner either way.
+
+**Q: After an update the overlay looks the same. Why?**
+
+OBS keeps running the page it loaded, even when the file on disk is replaced. The game therefore refreshes every browser source that shows `hangman_overlay.html` by itself — after an update and once per Streamer.bot session — over the OBS connection set on the **Overlay** page. If OBS is not connected through Streamer.bot, press **Refresh Overlay in OBS**, or right-click the browser source in OBS and choose *Refresh*. From then on the page also reloads itself whenever a newer version lands on disk.
 
 **Q: Does the overlay give the hint away?**
 
