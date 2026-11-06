@@ -38,7 +38,8 @@ round ends when someone solves it, the lives run out or the clock does.
   swaps the word mid-round and keeps one revealed letter. Win streaks can pay a bonus.
 - 📺 **An overlay that plays along.** The gallows fills in with every wrong guess and adapts to the number of
   lives. Evil Hangman's swap plays as a glitch, and chat only hears about it once the glitch is over. After
-  an update the game refreshes the browser source in OBS by itself.
+  an update the game refreshes the browser source in OBS by itself, and a demo or a sample round shows it in place
+  before you go live.
 - 📚 **Wordlists from free sources.** The importer fills the wordlist with hints and difficulty: countries,
   capitals and rivers from Wikidata, German nouns from OdeNet, Pokémon from PokéAPI, video games from IGDB.
 - 💰 **Payouts with a ceiling.** A base reward for the word, optional points per letter, and a bonus for harder
