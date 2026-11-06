@@ -1,4 +1,4 @@
-# v13.0.0 - Unreleased
+# v13.0.0 - 2026-11-07
 
 ### Added
 - **Try the demo** and **Show a sample round** on the Overlay page, next to the OBS buttons. *Try the demo* opens
@@ -16,7 +16,8 @@
   scoreboard action too). The pages are the same - Game, Words, Overlay, Access, Messages, Board, Log - plus a help
   page and a customise mode (the pencil: rename, move or hide pages and fields, accent colour, language).
 - **English or German.** With the window's language set to `de`, every setting, section, page and message reads in
-  German. The help and about pages, the list column headers and the name-list placeholder stay English for now.
+  German, the word list's column headers and the name-list placeholder included. The help and about pages stay
+  English.
 - `configs.json` keeps working as it is: the window reads the old names (`MaxWrongGuesses`, `MsgGameStart`, …)
   through aliases and writes the new ones on the first save. `OverlayBackgroundOpacity` is stored as a percent now
   (an old 0.5 reads as 50). `DarkMode` moves into `uiframework.layout.json`; the Egg mode is gone (the framework's
@@ -26,10 +27,10 @@
   the Log page filters by result, platform and day; files from before v13 show as raw lines. A *Write a log file per
   day* switch sits on the Log page.
 - **Importing words** is a section of the Words page: source, topic, language, limits and difficulty as fields, then
-  *Import now*. The fetched words skip what the list already holds and land in `Hangman-Wordlist.json`; reopen the
-  window to see them in the list (a Save before that writes the list as shown). Gone with the old window: the preview
-  with ticks before anything is added, search and filter in the list, Ctrl/Shift selection (a framework gap, noted
-  for a later UIFramework release). The IGDB client ID and secret are typed into the import fields; they are still
+  *Import now*. The fetched words skip what the list already holds, land in `Hangman-Wordlist.json` and show in
+  the list right away. Gone with the old window: the preview with ticks before anything is added.
+- **The word list is a table,** edited in place: a click into a cell edits it, a search box above, several rows
+  picked and removed at once (Remove row or Delete). The IGDB client ID and secret are typed into the import fields; they are still
   kept in Streamer.bot's global variables after the first import, never in `configs.json`.
 - *Categories in play* became *Categories left out*: type a category name and press Enter to leave it out; the
   checkbox list of the old window needed the word list at hand.
@@ -40,6 +41,8 @@
   cannot push it out of range either.
 - The OBS buttons are *Create the browser source in OBS* and *Refresh the overlay in OBS*; both answer in the
   window's footer instead of a message box. *Open the word list folder* and *Open the overlay folder* buttons.
+- The game and the scoreboard carry UIFramework's current host block (0.9.11). Needs UIFramework 0.9.8 or newer for
+  the word table; the settings action fetches it.
 
 ### Added
 - **Free mode.** A switch on the Game page (and a pill in the header): letters and wins pay nothing while it is on.
