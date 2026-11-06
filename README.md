@@ -48,6 +48,13 @@ round ends when someone solves it, the lives run out or the clock does.
   typed or from the reward's cost. Wins pay out in your custom currency.
 - 💬 **Control over chat.** Every line is editable with a preview. A rate limit catches guess spam, blocked
   users are ignored, and a per-platform scoreboard can reset monthly.
+- 🆓 **Free mode.** A switch, or `!SetFreeHangman` / `!EndFreeHangman` from chat (moderators): rounds pay nothing,
+  with a message to chat and a custom trigger each.
+- 🔔 **Hooks for your own actions.** Custom triggers for every round that starts, is won, lost, stopped or times
+  out, with the round as arguments, and `GetLastRoundResult` for an Execute C# Method.
+- ⚙️ **One settings window.** Built on [UIFramework for streamer.bot](https://github.com/aaskjer/UIFramework-Streamer.bot),
+  shared with the other chat games: it downloads itself on the first open and keeps itself current, reads English or
+  German, and lets you rename, move or hide pages and fields.
 
 ---
 

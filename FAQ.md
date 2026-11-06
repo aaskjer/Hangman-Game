@@ -9,21 +9,33 @@
 Under your Streamer.bot base directory:
 ```
 Chat Games/Hangman Game/configs.json            ← settings and every chat message
+Chat Games/Hangman Game/uiframework.layout.json ← your layout of the window: theme, language, renamed or hidden pages and fields
 Chat Games/Hangman Game/Hangman-Wordlist.json   ← word pool
 Chat Games/Logs/HM-log-YYYY-MM-DD.txt           ← action log, one file per day
 Chat Games/Hangman Game/Import Cache/           ← OdeNet download for the word importer
+UIFramework/lib/<version>/UIFramework.dll       ← the settings window, downloaded on first open
 ```
-Older installs also have a `messages.json` next to `configs.json`. Its contents were folded into `configs.json`, and the file is deleted the next time you save. Editing any of this by hand is never necessary — the settings window writes all of it.
+A `configs.json` from before v13 keeps working: the window reads its old names and writes the new ones on the first save. Older installs also have a `messages.json` next to it; a message the settings file does not hold is still read from there. Editing any of this by hand is never necessary — the settings window writes all of it.
 
 ---
 
+**Q: What is UIFramework.dll, and why does the window want to download something?**
+
+The settings window is no longer part of the import. It lives in [UIFramework for streamer.bot](https://github.com/aaskjer/UIFramework-Streamer.bot), one window shared by all of these chat games, so a fix or a new feature there reaches every game at once. The `[HM] - Settings` action only loads that DLL and hands it the game's settings table.
+
+The first open asks before fetching anything. `Yes` downloads the file from the UIFramework releases, checks it against the SHA-256 published next to it and puts it in `UIFramework\lib\<version>\` under your Streamer.bot folder. `No` opens that folder so you can place the file yourself. Later releases are offered the same way; `Cancel` skips one, and `"autoUpdate": false` in `uiframework.layout.json` stops the check altogether.
+
 **Q: The Settings GUI won't open. What do I do?**
 
-If `configs.json` cannot be read at all — another program holds it, or the folder is not writable — the window says so and changes nothing. Close whatever has the file open and try again.
+If the log says `UIFramework.dll was not found`, the download was declined or did not finish: open the window again and answer `Yes`, or put the DLL from the [UIFramework releases](https://github.com/aaskjer/UIFramework-Streamer.bot/releases) into `UIFramework\lib\<version>\` by hand.
 
-If the file is there but its contents are damaged, the window opens anyway: the damaged file is kept beside it as `configs.json.broken`, and the settings come from `configs.json.bak`, the copy saved before the last write. If that is unusable too, you get the defaults. Either way the window tells you which of the two happened, and Save writes a healthy file again.
+If `configs.json` is damaged, the window opens on the defaults and says so in its banner; Save writes a healthy file again (the replaced file is kept as `configs.json.bak`). The game logs the same and plays on the defaults until then.
 
 Anything else is worth a look in the Streamer.bot log, and worth [reporting](https://github.com/aaskjer/Hangman-Game/issues).
+
+**Q: Can the window be in German?**
+
+Yes: the pencil at the bottom left, then the language. Every setting, section, page and message reads in German; the help and about pages stay English for now.
 
 ---
 
@@ -226,7 +238,7 @@ Both sit on the **Access** page and are written straight into the Streamer.bot c
 
 **Q: How do I add or edit words?**
 
-On the **Words** page. Add, delete, search and filter directly in the table; changes stay in memory until you hit Save or Save & Exit.
+On the **Words** page: one row per word, `Add row` adds one, `×` takes one out, `Restore defaults` brings the built-in list back. Changes stay in the window until you hit Save or Save & Exit.
 
 **Q: What does Difficulty control?**
 
@@ -238,7 +250,7 @@ The used-word pool for that range is cleared and every word becomes eligible aga
 
 **Q: The wordlist file is missing or corrupt. Will the game break?**
 
-No. Every round start checks `Hangman-Wordlist.json`. Missing or empty, and the built-in default list of 15 words is written to disk — the same list the *Load Defaults* button hands out.
+No. Every round start checks `Hangman-Wordlist.json`. Missing or empty, and the built-in default list of 15 words is written to disk — the same list *Restore defaults* on the Words page hands out.
 
 ---
 
@@ -246,7 +258,7 @@ No. Every round start checks `Hangman-Wordlist.json`. Missing or empty, and the 
 
 **Q: Where can the importer get words from?**
 
-*Import* on the **Words** page fetches from four free sources:
+*Import words* on the **Words** page fetches from four free sources:
 
 | Source | What | Language | License |
 |--------|------|----------|---------|
@@ -255,7 +267,7 @@ No. Every round start checks `Hangman-Wordlist.json`. Missing or empty, and the 
 | [PokéAPI](https://pokeapi.co) | Pokémon by generation, with their category as the hint | German, English | — |
 | [IGDB](https://www.igdb.com) | Video games, best-rated first, with year and genre as the hint | English titles | IGDB terms |
 
-You see the list before anything is added: untick what you don't want, fix a hint in the table, and the rest lands in the category you named. Nothing is kept until you click Save.
+Pick the source, the topic and the limits, then *Import now*: words the list already holds are skipped, the rest lands in `Hangman-Wordlist.json` in the category you named, and the answer under the button says what came in. Reopen the window to see them in the list and fix a hint there if you like; a Save before reopening writes the list as the window shows it.
 
 **Q: What does the importer leave out?**
 
@@ -267,11 +279,27 @@ Answers with digits or symbols, more letters than **Max. Letters** or more words
 
 **Q: What does IGDB need?**
 
-The Client ID and Client Secret of a free Twitch developer app. Create one at [dev.twitch.tv/console/apps](https://dev.twitch.tv/console/apps) with any name, `http://localhost` as the redirect URL and *Confidential* as the client type. Both values are kept in Streamer.bot's global variables (`hm_IgdbClientId`, `hm_IgdbClientSecret`), never in `configs.json`.
+The Client ID and Client Secret of a free Twitch developer app. Create one at [dev.twitch.tv/console/apps](https://dev.twitch.tv/console/apps) with any name, `http://localhost` as the redirect URL and *Confidential* as the client type. Type both into the import fields once; after the first import they are kept in Streamer.bot's global variables (`hm_IgdbClientId`, `hm_IgdbClientSecret`), never in `configs.json`, and the fields may stay empty.
 
 **Q: Some OdeNet hints don't match the word.**
 
 OdeNet groups synonyms, and a few groups mix two meanings. The importer picks the word whose meanings fit the topic best, but read the list before you add it. The OdeNet file (about 29 MB) is downloaded once and kept in `Chat Games/Hangman Game/Import Cache` for a month.
+
+---
+
+## 🆓 Free mode
+
+**Q: How do I let people play without points changing hands?**
+
+Switch on **Free mode** on the Game page: letters and wins pay nothing, the overlay and everything else runs as usual. A moderator can switch it from chat with `!SetFreeHangman` and `!EndFreeHangman`; the two commands come with the import, disabled and for Moderators, enable them in Streamer.bot's Commands tab. The switch is written into `configs.json`, so the window's pill shows it, chat gets the **Started** or **Ended** message, and your own actions can listen to `Hangman: Free Game Start` and `Hangman: Free Game End`. An action of your own can do the same with an Execute C# Method on `StartFreeGame` or `EndFreeGame` of the game action.
+
+---
+
+## 🔔 Your own actions
+
+**Q: Which custom triggers are there?**
+
+Custom > Chat Game > Hangman Game: `Hangman: Game Start`, `Game Win`, `Game Loss`, `Game Stopped`, `Timeout`, `Free Game Start` and `Free Game End`. A settled round carries `roundOutcome` (WIN, BLITZ-WIN, LOSS, TIMEOUT, STOPPED), `roundWord`, `roundCategory`, `roundDifficulty`, `roundLetters`, `roundPlatform`, `roundWinner`, `roundWinnerId`, `roundPoints`, `roundWrongGuesses`, `roundMaxWrong`, `roundBlitz`, `roundFree`, `roundCurrency` and `roundParticipants`; the same values sit in the globals `hm_last…`, and `GetLastRoundResult`, run with an Execute C# Method sub-action on the game action, hands them to any other action.
 
 ---
 
