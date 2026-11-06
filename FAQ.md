@@ -357,6 +357,10 @@ A local HTML file that OBS loads as a browser source and that repaints itself wh
 
 *Setup Overlay in OBS* on the **Overlay** page creates the scene and the browser source over the Streamer.bot OBS connection you already have. By hand works too: the folder button opens the directory, and `hangman_overlay.html` is a plain local file.
 
+**Q: How do I see the overlay without starting a round?**
+
+*Try the demo* on the **Overlay** page opens it in your browser, playing made-up rounds with your saved colours and sizes. To place it in OBS, add `&demo=1` to the end of the browser source's address (or `?demo=1` if the address has no `?` yet) and remove it again afterwards. *Show a sample round* plays one made-up round on the overlay that is already open, the one in OBS included, and then puts the overlay back; it does nothing while a real round runs.
+
 **Q: What does the overlay show when a round ends?**
 
 | Ending | Banner |

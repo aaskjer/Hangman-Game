@@ -42,6 +42,8 @@ A local HTML file that OBS loads as a browser source and that repaints itself as
 
 OBS keeps showing the overlay it loaded until the browser source is refreshed. The game does that by itself after an update; *Refresh the overlay in OBS* does it on demand.
 
+*Try the demo* opens the overlay in your browser and plays made-up rounds with your saved look, no Streamer.bot needed; `&demo=1` at the end of the browser source's address in OBS does the same, so you can place and size the source. *Show a sample round* plays one made-up round on the overlay that is open, the one in OBS included, then puts it back; it waits for no one, so if you are live your viewers see it too, and it refuses while a real round runs.
+
 ## Access
 <p align="center"><img alt="Access page" src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/screenshots/access.png?raw=true"></p>
 

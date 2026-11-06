@@ -1,5 +1,13 @@
 # v13.0.0 - Unreleased
 
+### Added
+- **Try the demo** and **Show a sample round** on the Overlay page, next to the OBS buttons. *Try the demo* opens
+  the overlay in your browser, playing made-up rounds without Streamer.bot in the colours and sizes you saved; in OBS,
+  `&demo=1` at the end of the source's address does the same, to place and size it. *Show a sample round* plays one
+  made-up round on the live overlay, the one in OBS included, letters, wrong guesses, an Evil Hangman swap and a win,
+  then puts the overlay back as it was; it refuses while a real round runs. The overlay is version 10 and replaces an
+  older copy on the next round, keeping that one as a `.bak`.
+
 ### Changed
 - **The settings window is UIFramework's.** `[HM] - Settings` is now UIFramework's generic settings action: it loads
   `UIFramework.dll` from the [UIFramework releases](https://github.com/aaskjer/UIFramework-Streamer.bot/releases) on
