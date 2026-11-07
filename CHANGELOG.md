@@ -1,3 +1,13 @@
+# v13.0.1 - 2026-11-07
+
+### Changed
+- **The settings action is UIFramework's stub 0.2.0.** When the game action hangs, the settings window waits 30
+  seconds for its answer, then carries on and can be closed; before, it waited for good. A game that has not
+  described itself for a minute no longer locks the settings until Streamer.bot restarts: the next run opens the
+  window.
+- The host block is UIFramework's current one (0.10.0). It names every type in full, so it no longer depends on the
+  action's `using` lines, and it can declare a tour of the window. Nothing changes in the window.
+
 # v13.0.0 - 2026-11-07
 
 ### Added
