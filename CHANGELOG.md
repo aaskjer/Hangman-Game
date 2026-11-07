@@ -14,6 +14,9 @@
   offers the new framework on its next open.
 
 ### Changed
+- **Import words shows only what the source uses.** *Topic* appears for Wikidata and OdeNet, the Q-ID for
+  Wikidata's custom topic, the generations for PokéAPI and the IGDB fields for IGDB; before, the others stood there
+  greyed out.
 - **The settings action is UIFramework's stub 0.2.0.** When the game action hangs, the settings window waits 30
   seconds for its answer, then carries on and can be closed; before, it waited for good. A game that has not
   described itself for a minute no longer locks the settings until Streamer.bot restarts: the next run opens the
