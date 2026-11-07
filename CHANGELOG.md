@@ -14,6 +14,9 @@
   offers the new framework on its next open.
 
 ### Changed
+- **Messages from an old `messages.json` show in the settings window.** Before, only the game read that file: the
+  window showed the default texts in their place, and a save wrote those over your messages. The messages now move
+  into `configs.json` on the first run of the game or of the window, and the file stays as `messages.json.migrated`.
 - **Import words shows only what the source uses.** *Topic* appears for Wikidata and OdeNet, the Q-ID for
   Wikidata's custom topic, the generations for PokéAPI and the IGDB fields for IGDB; before, the others stood there
   greyed out.

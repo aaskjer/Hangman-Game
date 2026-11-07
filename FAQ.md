@@ -15,7 +15,7 @@ Chat Games/Logs/HM-log-YYYY-MM-DD.txt           ← action log, one file per day
 Chat Games/Hangman Game/Import Cache/           ← OdeNet download for the word importer
 UIFramework/lib/<version>/UIFramework.dll       ← the settings window, downloaded on first open
 ```
-A `configs.json` from before v13 keeps working: the window reads its old names and writes the new ones on the first save. Older installs also have a `messages.json` next to it; a message the settings file does not hold is still read from there. Editing any of this by hand is never necessary — the settings window writes all of it.
+A `configs.json` from before v13 keeps working: the window reads its old names and writes the new ones on the first save. Older installs also have a `messages.json` next to it; since v13.1.0 its messages move into `configs.json` on the first run of the game or of the settings window, and the file stays as `messages.json.migrated`. Editing any of this by hand is never necessary — the settings window writes all of it.
 
 ---
 
