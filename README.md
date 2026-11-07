@@ -57,6 +57,10 @@ round ends when someone solves it, the lives run out or the clock does.
   shared with the other chat games: it downloads itself on the first open and keeps itself current, reads English or
   German, and lets you rename, move or hide pages and fields.
 
+<p align="center">
+  <img src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/overlay/round.png?raw=true" alt="A round on the overlay" width="620">
+</p>
+
 ---
 
 ## Credits
