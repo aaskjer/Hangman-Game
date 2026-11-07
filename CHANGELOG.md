@@ -1,3 +1,32 @@
+# v13.1.0 - 2026-11-07
+
+### Added
+
+- **The Log page shows every column.** Each line carries the guess, the word, the lives and the payout under the
+  keys the Log page reads (Guess, Word, Wrong, Reward), and Round is the round's number. A win is logged once instead
+  of twice, and the guess that ends a round and its payout carry the round too. Lines written before v13 read again
+  as well (time, result, player, round) with UIFramework 1.0.0, and those from v13.0 fill the Guess, Word and Wrong
+  columns.
+- **A tour of the settings window.** The first time the window opens, a short tour rings one part after the other
+  (the pages, saving, the customise mode) and says what it does; the **?** at the top right shows it again.
+- **UIFramework 1.0.0.** Problems the window finds sit behind a red **i** in its header instead of on the About or
+  Log page, and *How to play*, *Log* and *About* sit together at the foot of the page list. The settings action
+  offers the new framework on its next open.
+
+### Changed
+- **Messages from an old `messages.json` show in the settings window.** Before, only the game read that file: the
+  window showed the default texts in their place, and a save wrote those over your messages. The messages now move
+  into `configs.json` on the first run of the game or of the window, and the file stays as `messages.json.migrated`.
+- **Import words shows only what the source uses.** *Topic* appears for Wikidata and OdeNet, the Q-ID for
+  Wikidata's custom topic, the generations for PokéAPI and the IGDB fields for IGDB; before, the others stood there
+  greyed out.
+- **The settings action is UIFramework's stub 0.2.0.** When the game action hangs, the settings window waits 30
+  seconds for its answer, then carries on and can be closed; before, it waited for good. A game that has not
+  described itself for a minute no longer locks the settings until Streamer.bot restarts: the next run opens the
+  window.
+- The host block is UIFramework's current one (1.0.0). It names every type in full, so it no longer depends on the
+  action's `using` lines, and it can declare a tour of the window. Nothing changes in the window.
+
 # v13.0.0 - 2026-11-07
 
 ### Added
