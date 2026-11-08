@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/HM/Hangman-Game-Full2.png?raw=true" alt="Hangman Game" width="400" height="400">
+  <img src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/HM/Hangman-Game-Full_blank.png?raw=true" alt="Hangman Game" width="380" height="400">
 </p>
 
 <h1 align="center">Hangman Game</h1>
