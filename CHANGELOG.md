@@ -1,3 +1,10 @@
+# v13.1.1 - 2026-11-08
+
+### Fixed
+
+- **A timeout and the streaks a round broke are logged on the round's platform.** Those two lines took the platform
+  of whoever ran the action last, so a Kick round that timed out could show up as Twitch on the Log page.
+
 # v13.1.0 - 2026-11-07
 
 ### Added
