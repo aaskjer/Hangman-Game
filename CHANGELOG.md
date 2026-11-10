@@ -1,3 +1,34 @@
+# v13.3.0 - 2026-11-10
+
+### Added
+
+- **A round while Twitch runs ads.** Under *Ad breaks* on the new Automation page: *Start a round when ads start*
+  starts one with the ad break, as a blitz round if you like; *Announce it before the ads* says so in chat 1 to 5
+  minutes ahead; *Bonus during ads* makes a round started during a break pay more; *Rounds only during ads* keeps
+  viewers' starts to the breaks. Twitch only; the import brings the *Ad Run* and *Upcoming Ad* triggers for it, and
+  `Hangman: Ad Break Started` and `Hangman: Ad Break Ended` are there for your own actions.
+- **Rounds that start themselves.** A new section on the Automation page switches on the timed action
+  `[HM] - Auto Hangman Timer`, which starts a round on every platform you are live on where none is running. It runs the
+  three ways a Streamer.bot timer can: *Every* so many minutes, at a *Random time* drawn anew between *Every* and
+  *At most*, and *Only after chat lines*, which holds a round back until a platform's chat has written that many
+  lines since its last automatic round (10 by default). No moderator and no cooldown is needed for these rounds.
+- **`StartRound` for your own actions.** An Execute C# Method sub-action on the game action starts a round from any
+  action: a hotkey, a Stream Deck button, a raid. Optional arguments `hangmanPlatform` and `hangmanBlitz`; it sets
+  `hangmanStarted` and `hangmanStartedOn`. No cooldown and no moderator check apply.
+- **Automatic rounds only where you are live.** Twitch is asked through its API, YouTube by the broadcasts
+  Streamer.bot monitors, Kick through its channel page (UIFramework 1.6.0). A platform that cannot say goes by
+  whether its chat has written anything since the last automatic round.
+- **Triggers and methods on the Help page.** The page now ends with every custom trigger and its arguments, and
+  the methods for your own actions. *Fire with sample values* under a trigger fires it once, so an action of
+  yours that listens to it can be tried without playing. Needs UIFramework 1.6.0, which the settings fetch by
+  themselves.
+
+### Changed
+
+- **The import carries a timed action, three chat triggers and two ad triggers.** Twitch, YouTube and Kick chat messages now reach
+  the game action, which only counts them for *Only after chat lines*. Import the new file once when updating, so
+  the timed action and the triggers exist; pasting the code alone leaves automatic rounds without their timer.
+
 # v13.2.0 - 2026-11-08
 
 ### Added
