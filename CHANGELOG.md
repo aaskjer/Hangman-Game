@@ -1,3 +1,22 @@
+# v13.3.0 - 2026-11-10
+
+### Added
+
+- **Rounds that start themselves.** A new section on the Game page switches on the timed action
+  `[HM] - Auto Hangman Timer`, which starts a round on every connected platform where none is running. It runs the
+  three ways a Streamer.bot timer can: *Every* so many minutes, at a *Random time* drawn anew between *Every* and
+  *At most*, and *Only after chat lines*, which holds a round back until a platform's chat has written that many
+  lines since its last automatic round (10 by default). No moderator and no cooldown is needed for these rounds.
+- **`StartRound` for your own actions.** An Execute C# Method sub-action on the game action starts a round from any
+  action: a hotkey, a Stream Deck button, a raid. Optional arguments `hangmanPlatform` and `hangmanBlitz`; it sets
+  `hangmanStarted` and `hangmanStartedOn`. No cooldown and no moderator check apply.
+
+### Changed
+
+- **The import carries a timed action and three chat triggers.** Twitch, YouTube and Kick chat messages now reach
+  the game action, which only counts them for *Only after chat lines*. Import the new file once when updating, so
+  the timed action and the triggers exist; pasting the code alone leaves automatic rounds without their timer.
+
 # v13.2.0 - 2026-11-08
 
 ### Added

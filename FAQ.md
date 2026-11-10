@@ -301,6 +301,14 @@ Switch on **Free mode** on the Game page: letters and wins pay nothing, the over
 
 Custom > Chat Game > Hangman Game: `Hangman: Game Start`, `Game Win`, `Game Loss`, `Game Stopped`, `Timeout`, `Free Game Start` and `Free Game End`. A settled round carries `roundOutcome` (WIN, BLITZ-WIN, LOSS, TIMEOUT, STOPPED), `roundWord`, `roundCategory`, `roundDifficulty`, `roundLetters`, `roundPlatform`, `roundWinner`, `roundWinnerId`, `roundPoints`, `roundWrongGuesses`, `roundMaxWrong`, `roundBlitz`, `roundFree`, `roundCurrency` and `roundParticipants`; the same values sit in the globals `hm_last…`, and `GetLastRoundResult`, run with an Execute C# Method sub-action on the game action, hands them to any other action.
 
+**Q: Can one of my own actions start a round?**
+
+Yes, from v13.3.0: add an **Execute C# Method** sub-action to any action, pick the `Hangman Game` action's code and the method `StartRound`. A hotkey, a Stream Deck button, a raid or a channel point reward of your own then starts a round, with no cooldown and no moderator check. Two optional arguments, set before it: `hangmanPlatform` (`twitch`, `youtube`, `kick` or `all`) and `hangmanBlitz` (`true` forces a blitz round while blitz rounds are on). Without `hangmanPlatform` the round goes to the chat the event came from, or, when the event came from no chat, to every platform with an account in Streamer.bot. Afterwards `hangmanStarted` says whether a round began and `hangmanStartedOn` where. A round already running is left alone, and the method then returns false, which stops the rest of your action.
+
+**Q: Can rounds start by themselves?**
+
+Yes, from v13.3.0, under **Rounds that start themselves** on the Game page. The timed action `[HM] - Auto Hangman Timer` that comes with the import starts a round **Every** so many minutes; **Random time** draws every wait anew between **Every** and **At most**; **Only after chat lines** holds a round back until a platform's chat has written that many lines since its last automatic round. These are the three ways a Streamer.bot timer can run; leave the timed action itself to the settings window. For the lines, the import sends every chat message to the game action, which only counts it. Hangman cannot tell whether you are live, so keep some chat lines asked for: with 0, rounds start in every connected chat whether or not anybody is there. Updating from an older version, import the new file once so the timed action and the chat triggers exist.
+
 ---
 
 ## 🏆 Scoreboard
