@@ -3,13 +3,20 @@
 ### Added
 
 - **Rounds that start themselves.** A new section on the Game page switches on the timed action
-  `[HM] - Auto Hangman Timer`, which starts a round on every connected platform where none is running. It runs the
+  `[HM] - Auto Hangman Timer`, which starts a round on every platform you are live on where none is running. It runs the
   three ways a Streamer.bot timer can: *Every* so many minutes, at a *Random time* drawn anew between *Every* and
   *At most*, and *Only after chat lines*, which holds a round back until a platform's chat has written that many
   lines since its last automatic round (10 by default). No moderator and no cooldown is needed for these rounds.
 - **`StartRound` for your own actions.** An Execute C# Method sub-action on the game action starts a round from any
   action: a hotkey, a Stream Deck button, a raid. Optional arguments `hangmanPlatform` and `hangmanBlitz`; it sets
   `hangmanStarted` and `hangmanStartedOn`. No cooldown and no moderator check apply.
+- **Automatic rounds only where you are live.** Twitch is asked through its API, YouTube by the broadcasts
+  Streamer.bot monitors, Kick through its channel page (UIFramework 1.6.0). A platform that cannot say goes by
+  whether its chat has written anything since the last automatic round.
+- **Triggers and methods on the Help page.** The page now ends with every custom trigger and its arguments, and
+  the methods for your own actions. *Fire with sample values* under a trigger fires it once, so an action of
+  yours that listens to it can be tried without playing. Needs UIFramework 1.6.0, which the settings fetch by
+  themselves.
 
 ### Changed
 
