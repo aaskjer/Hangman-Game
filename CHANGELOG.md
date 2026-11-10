@@ -2,7 +2,12 @@
 
 ### Added
 
-- **Rounds that start themselves.** A new section on the Game page switches on the timed action
+- **A round while Twitch runs ads.** Under *Ad breaks* on the new Automation page: *Start a round when ads start*
+  starts one with the ad break, as a blitz round if you like; *Announce it before the ads* says so in chat 1 to 5
+  minutes ahead; *Bonus during ads* makes a round started during a break pay more; *Rounds only during ads* keeps
+  viewers' starts to the breaks. Twitch only; the import brings the *Ad Run* and *Upcoming Ad* triggers for it, and
+  `Hangman: Ad Break Started` and `Hangman: Ad Break Ended` are there for your own actions.
+- **Rounds that start themselves.** A new section on the Automation page switches on the timed action
   `[HM] - Auto Hangman Timer`, which starts a round on every platform you are live on where none is running. It runs the
   three ways a Streamer.bot timer can: *Every* so many minutes, at a *Random time* drawn anew between *Every* and
   *At most*, and *Only after chat lines*, which holds a round back until a platform's chat has written that many
@@ -20,7 +25,7 @@
 
 ### Changed
 
-- **The import carries a timed action and three chat triggers.** Twitch, YouTube and Kick chat messages now reach
+- **The import carries a timed action, three chat triggers and two ad triggers.** Twitch, YouTube and Kick chat messages now reach
   the game action, which only counts them for *Only after chat lines*. Import the new file once when updating, so
   the timed action and the triggers exist; pasting the code alone leaves automatic rounds without their timer.
 
