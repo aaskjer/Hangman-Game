@@ -1,3 +1,22 @@
+# v13.3.1 - 2026-11-12
+
+### Fixed
+
+- **The settings action passes over a UIFramework it is too old for.** Every game in a Streamer.bot shares the
+  installed UIFramework.dll. Should a later one need a newer settings action than this game's, the action now
+  leaves that file alone and opens the window with an older one that fits, with a line in the log; it used to
+  load whatever was newest. (Settings action 0.2.1.)
+- **The update notice works with a UIFramework.dll you put in by hand.** A file saved from the browser carries
+  Windows' "downloaded from the internet" mark, and the game did not load it: the notice at Streamer.bot's start
+  never came, and the window could not tell whether you are live. A file damaged since its download is no
+  longer loaded for either.
+- **The timer for automatic rounds stays off once you switch it off.** A run that came in just after had
+  switched it on again.
+
+### Changed
+
+- The host block is UIFramework 1.8.4's. Nothing in your settings changes.
+
 # v13.3.0 - 2026-11-10
 
 ### Added
