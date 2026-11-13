@@ -23,7 +23,7 @@ A `configs.json` from before v13 keeps working: the window reads its old names a
 
 The settings window is no longer part of the import. It lives in [UIFramework for streamer.bot](https://github.com/aaskjer/UIFramework-Streamer.bot), one window shared by all of these chat games, so a fix or a new feature there reaches every game at once. The `[HM] - Settings` action only loads that DLL and hands it the game's settings table.
 
-The first open asks before fetching anything. `Yes` downloads the file from the UIFramework releases, checks it against the SHA-256 published next to it and puts it in `UIFramework\lib\<version>\` under your Streamer.bot folder. `No` opens that folder so you can place the file yourself. Later releases are offered the same way; `Cancel` skips one, and `"autoUpdate": false` in `uiframework.layout.json` stops the check altogether.
+The first open asks before fetching anything. `Yes` downloads the file from the UIFramework releases, checks it against the SHA-256 published next to it and puts it in `UIFramework\lib\<version>\` under your Streamer.bot folder. `No` opens that folder so you can place the file yourself. Later releases are offered in a dialog of their own: `Yes` takes one, `No` skips it, `Cancel` asks again at the next open, and the dialog says whether Streamer.bot has to be restarted for it. A `UIFramework\loader.json` under your Streamer.bot folder holding `{ "autoUpdate": false }` stops the check for every game.
 
 **Q: The Settings GUI won't open. What do I do?**
 
@@ -62,7 +62,7 @@ Settings → **Access** → turn off **Require Mod To Start**. The broadcaster c
 1. Turn on **Use Channel Points To Start** on the **Access** page.
 2. Paste your **Reward ID** into the field — the button beside it opens a reward lookup.
 
-The chat command then no longer starts a round, but everyone still guesses with `!g` as before.
+On Twitch the chat command then starts a round for moderators and the broadcaster only; everyone still guesses with `!g` as before. Viewers on the **Blocked users** list cannot start a round either way, and with **Rounds only during ads** on, a redemption outside an ad break is refunded like any other that cannot start a round.
 
 **Q: How much does a redemption stake?**
 
@@ -70,7 +70,7 @@ The stake is read from the redemption, in this order:
 
 | Where it comes from | When |
 |------|-----------|
-| What the viewer typed | The reward asks for text and the viewer entered a number |
+| What the viewer typed | The reward asks for text and the viewer entered a number no higher than the reward's cost (a higher one is refused and refunded) |
 | The reward's cost | No input, but the reward costs channel points |
 | Nothing | Neither applies — the round is free to play |
 
@@ -80,7 +80,7 @@ Older setups that used the removed Bet Mode dropdown are migrated on first load:
 
 **Q: A round is stuck as active after Streamer.bot restarted. How do I clear it?**
 
-It already is clear — the round lives in memory only, so a restart ends it. Just start a new one. During a session, `!killhm` ends a round.
+It already is clear — the round lives in memory only, so a restart ends it, and the overlay drops the old round as Streamer.bot starts. Just start a new one. During a session, `!killhm` ends a round.
 
 ---
 
@@ -108,11 +108,16 @@ These are the commands as they come in the import. You can rename them in Stream
 - **Correct word** → round is won immediately.
 - **Wrong word, same length as the hidden word** → costs **2 lives**.
 - **Wrong word, shorter than the hidden word** (partial guess) → costs **1 life**.
-- Guessing the same wrong word twice sends a duplicate-spam message but does not cost lives again.
+- Guessing the same wrong word twice sends a duplicate-spam message but does not cost lives again, and does not count toward the rate limit.
+- Spaces, hyphens and apostrophes don't matter: `pac man`, `pac-man` and `pacman` all solve *Pac-Man*.
 
 **Q: Can the same letter be guessed twice?**
 
 No. A duplicate letter guess sends `MsgAlreadyGuessed` and is ignored — it does not cost lives or count toward the rate limit.
+
+**Q: What about words with a hyphen or a digit in them?**
+
+Only letters are hidden. Hyphens, digits and other signs in a word show from the start, so *R2-D2* is played as `R 2 - D 2` with the two letters to find. A guess that is not a letter or a word is answered with `MsgInvalidGuess` and does not make you a player of the round.
 
 ---
 
@@ -223,7 +228,7 @@ The swap message waits until the glitch has played out on the overlay (**Glitch 
 
 **Q: What does the rate limit do?**
 
-It caps how many guesses one user may make inside a rolling window. Past `AntiCheatMaxGuesses` within `AntiCheatWindowSeconds` the guess is blocked and `MsgAntiCheat` goes out. Duplicate letter guesses do not count toward it, and broadcasters are exempt. Setting the maximum to `0` switches the limit off.
+It caps how many guesses one user may make inside a rolling window. Past `AntiCheatMaxGuesses` within `AntiCheatWindowSeconds` the guess is blocked and `MsgAntiCheat` goes out. Duplicate letters, a wrong word the same user already tried and guesses that are no letter or word do not count toward it, and broadcasters are exempt. Setting the maximum to `0` switches the limit off.
 
 **Q: What is the difference between Global Cooldown and User Cooldown?**
 
@@ -250,7 +255,7 @@ The used-word pool for that range is cleared and every word becomes eligible aga
 
 **Q: The wordlist file is missing or corrupt. Will the game break?**
 
-No. Every round start checks `Hangman-Wordlist.json`. Missing or empty, and the built-in default list of 15 words is written to disk — the same list *Restore defaults* on the Words page hands out.
+No. Every round start checks `Hangman-Wordlist.json`. Missing or empty, and the built-in default list of 15 words is written to disk — the same list *Restore defaults* on the Words page hands out. A file that is not valid JSON (a typo after editing it by hand) is first kept as `Hangman-Wordlist.json.<date-time>.broken`, so nothing you typed is lost; a file another program holds open is left alone.
 
 ---
 
@@ -267,7 +272,7 @@ No. Every round start checks `Hangman-Wordlist.json`. Missing or empty, and the 
 | [PokéAPI](https://pokeapi.co) | Pokémon by generation, with their category as the hint | German, English | — |
 | [IGDB](https://www.igdb.com) | Video games, best-rated first, with year and genre as the hint | English titles | IGDB terms |
 
-Pick the source, the topic and the limits, then *Import now*: words the list already holds are skipped, the rest lands in `Hangman-Wordlist.json` in the category you named, and the answer under the button says what came in. Reopen the window to see them in the list and fix a hint there if you like; a Save before reopening writes the list as the window shows it.
+Pick the source, the topic and the limits, then *Import now*: words the list already holds are skipped (*Österreich* and *oesterreich* count as the same word), the rest lands in `Hangman-Wordlist.json` in the category you named, or the topic's name in the import's language, and the answer under the button says what came in. An import that would take longer than the window waits for its answer (about half a minute) adds nothing and says so; ask for fewer words then. Reopen the window to see them in the list and fix a hint there if you like; a Save before reopening writes the list as the window shows it.
 
 **Q: What does the importer leave out?**
 
@@ -275,7 +280,7 @@ Answers with digits or symbols, more letters than **Max. Letters** or more words
 
 **Q: How is the difficulty picked?**
 
-*Auto* rates every word from its length, rare letters (j, q, x, y, z) and how well known it is — the rank in the result for Wikidata and IGDB, the generation for Pokémon. Or pick one fixed difficulty for the whole import.
+*Auto* rates every word from its length, rare letters (j, q, x, y, z) and how well known it is — the rank in the result for Wikidata and IGDB, the generation for Pokémon. Or pick one fixed difficulty for the whole import; above your **Highest difficulty** the answer says those words are not drawn until you raise it.
 
 **Q: What does IGDB need?**
 
@@ -283,7 +288,7 @@ The Client ID and Client Secret of a free Twitch developer app. Create one at [d
 
 **Q: Some OdeNet hints don't match the word.**
 
-OdeNet groups synonyms, and a few groups mix two meanings. The importer picks the word whose meanings fit the topic best, but read the list before you add it. The OdeNet file (about 29 MB) is downloaded once and kept in `Chat Games/Hangman Game/Import Cache` for a month.
+OdeNet groups synonyms, and a few groups mix two meanings. The importer picks the word whose meanings fit the topic best, but read the list before you add it. The OdeNet file (about 29 MB) is downloaded once and kept in `Chat Games/Hangman Game/Import Cache` for a month. On a slow line the first download goes on in the background; press *Import now* again a minute later.
 
 ---
 
@@ -319,15 +324,15 @@ Yes, from v13.3.0, under **Rounds that start themselves** on the Automation page
 
 **Q: How is the leaderboard built?**
 
-From the players' stats, read fresh every time someone asks with `!hms`. Everyone who has won at least one round on that platform is on it, ranked by wins and then by points.
+From the players' stats, read fresh every time someone asks with `!hms`. Everyone who has played on that platform is on it, ranked by wins, then by points, then by letters found, and by name when all of that is even. A board of more than 10 places comes as a few longer messages instead of one per place, so the chat's rate limit is not hit.
 
 **Q: How do I exclude the broadcaster or bot from the scoreboard?**
 
-On the **Board** page, turn off **Include Broadcaster** or **Include Bot**. **Blocked From Board** takes a comma-separated list for anything else you want hidden, other bots for instance. Hiding someone there does not stop them playing — that list is on the **Access** page.
+On the **Board** page, turn off **Include Broadcaster** or **Include Bot**. **Blocked From Board** takes a comma-separated list for anything else you want hidden, other bots for instance; it hides them whatever **Include Bot** is set to. Hiding someone there does not stop them playing — that list is on the **Access** page.
 
 **Q: How does the monthly auto-reset work?**
 
-Turn on **Reset All (Monthly)** or the per-platform toggles. On the first scoreboard command of a new month, or on and after the configured reset day, that platform's stats are zeroed and the board cleared. A chat message goes out and the date is stored, so it runs once.
+Turn on **Reset All (Monthly)**, or per platform **reset monthly** or a **reset on day**. Monthly clears the board as a new month begins; a reset day (1 to 31, the last day in a shorter month) clears it every month on that day, with or without the monthly switch. The check runs with the first round, guess or scoreboard command of each day, so the reset happens before anyone plays into the new month. Every player's stats on that platform are zeroed, not just the winners'. A chat message goes out and the month is stored, so it runs once a month.
 
 ---
 
@@ -335,7 +340,7 @@ Turn on **Reset All (Monthly)** or the per-platform toggles. On the first scoreb
 
 **Q: How do streaks work?**
 
-Turn on **Track Streaks** on the **Board** page. Every word a player solves adds one to their streak. It only breaks when a round they guessed in is lost — game over or time up. A round a moderator stops breaks nothing.
+Turn on **Track Streaks** on the **Board** page. Every word a player solves adds one to their streak. It only breaks when a round they guessed in is lost — game over or time up, both of which also count as a loss in their stats. A round a moderator stops breaks nothing.
 
 **Q: Do streaks pay?**
 
@@ -355,7 +360,7 @@ Twitch, YouTube and Kick, all three at once and without a setting to switch them
 
 **Q: Can the game run on multiple platforms at the same time?**
 
-Yes. Each platform has its own `GameState` in memory, so a Twitch round and a YouTube round run side by side without touching each other. Points, stats and leaderboards are kept per platform as well.
+Yes. Each platform has its own `GameState` in memory, so a Twitch round and a YouTube round run side by side without touching each other. Points, stats and leaderboards are kept per platform as well. The OBS overlay shows one round at a time: the one that started first keeps it until it ends, then the other round takes over with its next guess.
 
 ---
 
@@ -363,7 +368,7 @@ Yes. Each platform has its own `GameState` in memory, so a Twitch round and a Yo
 
 **Q: What does the overlay show?**
 
-A local HTML file that OBS loads as a browser source and that repaints itself while the round runs: the gallows filling in with every wrong guess, the masked word, and whichever of category, lives, guessed letters, wrong letters, wrong words and hint you switch on. When the round ends it shows the answer and fades out after the delay you set — `0` makes it disappear at once.
+A local HTML file that OBS loads as a browser source and that repaints itself while the round runs: the gallows filling in with every wrong guess, the masked word, and whichever of category, lives, guessed letters, wrong letters, wrong words and hint you switch on. When the round ends it shows the answer and fades out after the delay you set — `0` makes it disappear at once. A round that has faded out stays gone when OBS reloads the page or you save the settings.
 
 **Q: How do I get it into OBS?**
 
