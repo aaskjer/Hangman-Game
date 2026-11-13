@@ -1,4 +1,4 @@
-# v13.3.2 - 2026-11-12
+# v13.3.2 - 2026-11-13
 
 ### Added
 
@@ -6,6 +6,21 @@
 
 ### Changed
 
+- **A reward that starts the round leaves `!hm` to moderators on Twitch.** Viewers start a round there with the
+  reward only; moderators and the broadcaster can still use the command, `!hm blitz` included.
+- **The reset day of the board is a day of the month.** *Twitch: reset on day* (and YouTube's, Kick's) clears that
+  board every month on that day, the last day in a shorter month, with or without the monthly switch. It used to
+  work only together with the monthly switch, and a 29, 30 or 31 skipped the months that are shorter.
+- **The board is checked for its reset every day the game runs,** with the first round, guess or board command, not
+  only with the first board command of a month. The days played before somebody asked for the board are no longer
+  cleared with the old month.
+- **A board of more than 10 places comes as a few longer messages,** so a top 25 no longer sends 26 chat lines in a
+  row. Ties are ranked by letters found, then by name.
+- **Spaces, hyphens and apostrophes don't matter in a word guess,** and the letters are all a word hides: digits and
+  signs show from the start, so *R2-D2* and *Pac-Man* can be solved.
+- **The OBS overlay shows one round at a time.** With rounds on two platforms at once, the one that started first
+  keeps the overlay until it ends. The overlay is version 11 and replaces an older copy on the next round.
+- Imported words get the topic's name in the import's language as their category (*Länder*, *Videospiele*, …).
 - **The update question says when Streamer.bot needs a restart.** A newer UIFramework can be used at once only
   while none is running in your Streamer.bot; otherwise it takes effect after a restart. The dialog now says which
   of the two it is, and after such a download a note says it again: restart when it suits you, everything goes on
@@ -18,6 +33,42 @@
 
 ### Fixed
 
+- **A typed stake can no longer be higher than the reward's cost.** A viewer could type any number into a reward
+  with text input and win it back many times over in your currency; such a redemption is now refused and refunded.
+- **A broken word list is kept before the defaults replace it,** as `Hangman-Wordlist.json.<date-time>.broken`. A
+  word list another program held open for a moment was replaced by the 15 default words.
+- **The monthly reset clears every player,** not only the ones with a win. Played rounds, letters, losses and points
+  of everyone else stayed.
+- **The board and `!hml` know every player,** not only the ones with a win: a board without winners said "no
+  scoreboard data yet", and a search for someone who never won found nobody. `!hml` takes the whole name now, with
+  or without the `@`.
+- **Hidden from the board** hides those names even while **Include the bot** is on.
+- **Blocked users cannot start a round,** by command or by reward (the reward is refunded).
+- **Rounds only during ads** holds for rewards too; a redemption outside an ad break is refunded.
+- **The IGDB client ID and secret are kept** after the first import, as the Words page says.
+- **An import that takes longer than the window waits writes nothing.** It used to write the words after the window
+  had given up on it, where the next save could take them away again. The first OdeNet download goes on in the
+  background instead of holding the import.
+- **Words the list holds with umlauts** (*Österreich*) are found again by an import that writes them out
+  (*oesterreich*).
+- **A fixed import difficulty above your highest difficulty** is pointed out in the answer.
+- **Points are not paid when the balance cannot be read,** instead of overwriting it with the reward alone.
+- **Free mode from chat no longer empties `configs.json`** when the file is being saved by the window at that moment.
+- **Several chat lines at once no longer mix up who guessed.** Runs of the game action take turns.
+- **A time-up counts as a loss** in the player's stats, as it already broke their streak.
+- **The hint is not sent with the guess that loses the round,** and the check before saving warns when blitz rounds
+  end before their hint.
+- **A repeated letter, a wrong word tried again or a guess that is no guess** no longer counts toward the rate limit,
+  and the last one no longer makes you a player of the round.
+- **The full figure shows only with the last life gone,** also with many lives.
+- **The time reminder is sent after an Evil Hangman glitch** that covered its second, instead of not at all.
+- **The overlay** stops the glitch when the round ends, does not show a finished round again after a reload of OBS
+  or a save of the settings, drops a round left over from before a restart of Streamer.bot, picks up a new fade time
+  and figure on save, and keeps long hints and lists inside the source at a scale above 100 %.
+- **An automatic round that could not start** no longer uses up the chat lines the next one waits for, and a time-up
+  found by the timer goes to the platform of its round.
+- **Free mode switched from your own action** answers on that action's platform, not the last one the game saw.
+- **The window's note on the stats** names the variables the game writes (`hm_gamesPlayed`, `hm_lettersFound`).
 - **A download GitHub does not deliver is tried three times** before the settings action gives up.
 - **No answer from the game shows as no answer.** A Try button said "done" and a table showed as empty when the
   game action did not answer.
@@ -127,6 +178,16 @@
   made-up round on the live overlay, the one in OBS included, letters, wrong guesses, an Evil Hangman swap and a win,
   then puts the overlay back as it was; it refuses while a real round runs. The overlay is version 10 and replaces an
   older copy on the next round, keeping that one as a `.bak`.
+- **Free mode.** A switch on the Game page (and a pill in the header): letters and wins pay nothing while it is on.
+  `!SetFreeHangman` and `!EndFreeHangman` switch it from chat (moderators; two new commands in the import, disabled
+  until you enable them), with a Started and an Ended message and the custom triggers `Hangman: Free Game Start` and
+  `Hangman: Free Game End`. An action of your own can do the same with an Execute C# Method on `StartFreeGame` or
+  `EndFreeGame`.
+- **The round as arguments.** `Hangman: Game Win`, `Game Loss`, `Game Stopped` and `Timeout` now carry the round:
+  `roundOutcome`, `roundWord`, `roundCategory`, `roundDifficulty`, `roundLetters`, `roundPlatform`, `roundWinner`,
+  `roundWinnerId`, `roundPoints`, `roundWrongGuesses`, `roundMaxWrong`, `roundBlitz`, `roundFree`, `roundCurrency`,
+  `roundParticipants`; the same in the globals `hm_last…`, and `GetLastRoundResult` (an Execute C# Method on the
+  game action) hands them to any other action.
 
 ### Changed
 - **The settings window is UIFramework's.** `[HM] - Settings` is now UIFramework's generic settings action: it loads
@@ -163,18 +224,6 @@
   window's footer instead of a message box. *Open the word list folder* and *Open the overlay folder* buttons.
 - The game and the scoreboard carry UIFramework's current host block (0.9.11). Needs UIFramework 0.9.8 or newer for
   the word table; the settings action fetches it.
-
-### Added
-- **Free mode.** A switch on the Game page (and a pill in the header): letters and wins pay nothing while it is on.
-  `!SetFreeHangman` and `!EndFreeHangman` switch it from chat (moderators; two new commands in the import, disabled
-  until you enable them), with a Started and an Ended message and the custom triggers `Hangman: Free Game Start` and
-  `Hangman: Free Game End`. An action of your own can do the same with an Execute C# Method on `StartFreeGame` or
-  `EndFreeGame`.
-- **The round as arguments.** `Hangman: Game Win`, `Game Loss`, `Game Stopped` and `Timeout` now carry the round:
-  `roundOutcome`, `roundWord`, `roundCategory`, `roundDifficulty`, `roundLetters`, `roundPlatform`, `roundWinner`,
-  `roundWinnerId`, `roundPoints`, `roundWrongGuesses`, `roundMaxWrong`, `roundBlitz`, `roundFree`, `roundCurrency`,
-  `roundParticipants`; the same in the globals `hm_last…`, and `GetLastRoundResult` (an Execute C# Method on the
-  game action) hands them to any other action.
 
 ---
 
