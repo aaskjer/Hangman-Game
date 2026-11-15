@@ -19,7 +19,7 @@ Right-Click on `Test` and click `Test Trigger` in the trigger section of `[HM] -
 
 The first time, a small dialog asks whether to download `UIFramework.dll` - the settings window itself, shared by all of these chat games and kept at [aaskjer/UIFramework-Streamer.bot](https://github.com/aaskjer/UIFramework-Streamer.bot). `Yes` fetches it (checked against its published hash) into `UIFramework\lib\<version>\` next to Streamer.bot; `No` opens that folder so you can place the file from the [releases](https://github.com/aaskjer/UIFramework-Streamer.bot/releases) yourself. When a newer window is released, the next open offers it the same way.
 
-The window has one page per subject, picked from the rail on the left. Every field carries a tooltip, so hovering usually answers the question faster than this page does. The pencil at the bottom left opens the customise mode: rename, reorder, hide or move pages and fields, pick an accent colour and the language (English or German); the window keeps that layout in `uiframework.layout.json` next to `configs.json`, through every update of the game.
+The window has one page per subject, picked from the rail on the left. Every field carries a tooltip, so hovering usually answers the question faster than this page does. The pencil at the bottom left opens the customise mode: rename, reorder, hide or move pages and fields, pick an accent colour and the language (English or German, in part also Spanish, French or Brazilian Portuguese); the window keeps that layout in `uiframework.layout.json` next to `configs.json`, through every update of the game.
 
 ## Game
 <p align="center"><img alt="Game page" src="https://github.com/aaskjer/Hangman-Game/blob/main/Assets/screenshots/game.png?raw=true"></p>

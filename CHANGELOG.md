@@ -3,6 +3,9 @@
 ### Added
 
 - **aaskjer on Twitch** is back among the links of the About page.
+- **The window in French and Brazilian Portuguese,** beside English, German and Spanish: the pencil at the bottom
+  left, then the language. In Spanish, French and Portuguese the window's own texts and the settings all chat games
+  share are translated; Hangman's own settings and messages stay English there. German has them all.
 
 ### Changed
 
@@ -28,8 +31,10 @@
 - **Closing the update question means "not now".** *Yes* takes the new UIFramework, *No* skips that version, and
   *Cancel*, the X and Esc ask again at the next open. Closing the dialog used to skip the version for good.
 - **A skipped version is skipped in every game.** It is kept once, in `UIFramework\loader.json` beside
-  Streamer.bot, and so is `"autoUpdate": false`. What a game's `uiframework.layout.json` holds is still read.
-- The settings action is 0.3.1, the host block UIFramework 1.9.0's. Nothing in your settings changes.
+  Streamer.bot, and so is `"autoUpdate": false`. What a game's `uiframework.layout.json` holds is still read. The
+  chat notice at Streamer.bot's start no longer names a version you skipped, nor any while the check is off.
+- The settings action is 0.3.2, the host block UIFramework 2.0.0's, and the settings offer UIFramework 2.0.0 the
+  next time they open. Nothing in your settings changes.
 
 ### Fixed
 
@@ -69,10 +74,26 @@
   found by the timer goes to the platform of its round.
 - **Free mode switched from your own action** answers on that action's platform, not the last one the game saw.
 - **The window's note on the stats** names the variables the game writes (`hm_gamesPlayed`, `hm_lettersFound`).
-- **A download GitHub does not deliver is tried three times** before the settings action gives up.
+- **A download GitHub does not deliver, or one that breaks off, is tried three times** before the settings action
+  gives up.
 - **No answer from the game shows as no answer.** A Try button said "done" and a table showed as empty when the
-  game action did not answer.
+  game action did not answer, or ran without answering.
 - **A late answer is not taken for the next one.** Every request to the game has a variable of its own.
+- **Another game's newer UIFramework no longer locks this window.** The update notice and the live check for
+  automatic rounds loaded the newest UIFramework installed, also one that needs a newer settings action than
+  Hangman's, and the settings window then would not open. They take the newest that fits now, and when that one is
+  damaged, the next older one instead of none until Streamer.bot restarts.
+- **A save reaches the game** also while the game is still answering another request of the window. It never heard
+  of such a save, and the overlay and the timer for automatic rounds went on with the old settings.
+- **A chat line that comes in while the window saves plays by your settings,** not by the defaults. A
+  `configs.json.bak` left without its `configs.json` is read by the window too, as the game reads it, and no longer
+  saved over with the defaults.
+- **Automatic rounds switched off stay off** also when *Random time* draws the next wait at the moment you save.
+- **An overlay opacity from before v13,** such as 0.29, comes over as 29 %, not as 28.999999999999996.
+- **The Help page's *Fire with sample values*** no longer freezes the window while the game is busy, and says why
+  the game did not answer.
+- **The Log page's folder button opens `Chat Games\Logs` beside Streamer.bot,** also after a file dialog such as
+  the window's Export was used, and lines written in the same second show newest first.
 
 # v13.3.1 - 2026-11-12
 

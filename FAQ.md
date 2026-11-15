@@ -35,7 +35,7 @@ Anything else is worth a look in the Streamer.bot log, and worth [reporting](htt
 
 **Q: Can the window be in German?**
 
-Yes: the pencil at the bottom left, then the language. Every setting, section, page and message reads in German; the help and about pages stay English for now.
+Yes: the pencil at the bottom left, then the language. Every setting, section, page and message reads in German; the help and about pages stay English for now. Spanish, French and Brazilian Portuguese are there too, in part: the window's own texts and the settings all chat games share are translated, Hangman's own settings and messages stay English.
 
 ---
 
