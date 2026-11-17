@@ -1,3 +1,11 @@
+# v13.3.3 - 2026-11-17
+
+### Changed
+
+- **The Log page colours a lost round and a wrong guess.** `GAME-OVER` shows grey, and a wrong letter or word
+  (`MISS-LTTR`, `MISS-WORD`, `MISS-PART`) amber. Both had the accent colour of every other line, so only the wins
+  stood out. Nothing in your settings or log files changes.
+
 # v13.3.2 - 2026-11-15
 
 ### Added
